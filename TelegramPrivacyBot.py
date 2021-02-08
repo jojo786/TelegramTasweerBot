@@ -4,7 +4,6 @@
 # Dont store telegram bot credentials in source code
 # Deploy to AWS; Lambda and API GW
 # Detect cartoon images
-# Detect videos
 
 from telegram.ext import Updater, InlineQueryHandler, CommandHandler, MessageHandler, Filters
 import requests
@@ -16,6 +15,8 @@ def image(update, context):
     print("Start processing image")
 
     chat_id = update.message.chat_id
+    chat_user = update.message.from_user
+    chat_group = update.message.chat.title
     #context.bot.send_message(chat_id=chat_id, text="Detected image")
 
     file = context.bot.getFile(update.message.photo[-1].file_id)
@@ -27,7 +28,7 @@ def image(update, context):
     
     found_face = str({len(response['FaceDetails'])})
     if response['FaceDetails']:
-        print("Found " + found_face + " faces in image, going to delete")
+        print("Found " + found_face + " faces in image from user " + str(chat_user.username) + " in group " + str(chat_group) + ", going to delete")
         #context.bot.send_message(chat_id=chat_id, text="Found " + found_face + " faces, deleting...")
         context.bot.delete_message(chat_id=chat_id, message_id=update.message.message_id)
     else:
@@ -37,7 +38,10 @@ def image(update, context):
 def vid(update, context):
     print("Start processing video")
     chat_id = update.message.chat_id
-    print("Found video, going to delete")
+    chat_user = update.message.from_user
+    chat_group = update.message.chat.title
+
+    print("Found video from user " + str(chat_user.username) + " in group " + str(chat_group) + ", going to delete")
     context.bot.delete_message(chat_id=chat_id, message_id=update.message.message_id)
 
 
