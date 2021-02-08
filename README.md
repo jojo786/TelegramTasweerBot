@@ -8,13 +8,15 @@ It uses AWS Rekognition to detect faces in the image, and then deletes.
 ## Videos
 Once the filter picks up a video, it deletes it
 
+# Privacy
+This bot does not access any text messages. It only has handlers for video and images
 
-# To run it
+# How to run it
 Install the python requirements with pip, and then run it with python.
 It picks up your telegram bot token from environment variables. AWS credentials also picked up from environment variables.
-Add the bot to your groups to manage PII.
+Add the bot to your groups/channels, then make it an Admin to manage PII in your channels/groups
 
-#TODO: 
+# TODO: 
 1. Dont use polling, so it can deployed as a Lambda
 2. Dont save image to file: https://stackoverflow.com/questions/59876271/how-to-process-images-from-telegram-bot-without-saving-to-file
 3. Dont store telegram bot credentials in source code
