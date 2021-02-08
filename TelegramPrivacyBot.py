@@ -4,7 +4,7 @@
 # Dont store telegram bot credentials in source code
 # Deploy to AWS; Lambda and API GW
 # Detect cartoon images
-# Detect videos
+
 
 from telegram.ext import Updater, InlineQueryHandler, CommandHandler, MessageHandler, Filters
 import requests
@@ -34,11 +34,18 @@ def image(update, context):
         print("Found " + found_face + " faces, NOT going to delete")
         #context.bot.send_message(chat_id=chat_id, text="Found " + found_face + " faces, NOT deleting...")
 
+def vid(update, context):
+    print("Start processing video")
+    chat_id = update.message.chat_id
+    context.bot.delete_message(chat_id=chat_id, message_id=update.message.message_id)
+
+
 def main():
     TELEGRAM_BOT = os.environ['TELEGRAM_BOT'] 
     updater = Updater(TELEGRAM_BOT)
     dp = updater.dispatcher
     dp.add_handler(MessageHandler(Filters.photo, image))
+    dp.add_handler(MessageHandler(Filters.video, vid))
     updater.start_polling()
     updater.idle()
 
