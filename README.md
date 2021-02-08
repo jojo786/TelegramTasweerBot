@@ -1,7 +1,8 @@
 # TelegramPrivacyBot
-Telegram Bot that detects and deletes Personally identifiable information (PII). For now, it delete images that contain faces
-Its written in Python, using the [python-telegram-bot](https://pypi.org/project/python-telegram-bot/) telegram bot framework. 
-When it detects:
+Telegram Bot that detects and deletes Personally identifiable information (PII).
+Its written in python, using the [python-telegram-bot](https://pypi.org/project/python-telegram-bot/) telegram bot framework. 
+
+When it detects these PII:
 ## Images
 It uses AWS Rekognition to detect faces in the image, and then deletes.
 ## Videos
