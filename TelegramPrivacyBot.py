@@ -44,6 +44,10 @@ def vid(update, context):
     print("Found video from user " + str(chat_user.username) + " in group " + str(chat_group) + ", going to delete")
     context.bot.delete_message(chat_id=chat_id, message_id=update.message.message_id)
 
+def health(update, context):
+    print("Start health command")
+    update.message.reply_text('Im here')
+    print("STOP health command")
 
 def main():
     TELEGRAM_BOT = os.environ['TELEGRAM_BOT'] 
@@ -51,6 +55,7 @@ def main():
     dp = updater.dispatcher
     dp.add_handler(MessageHandler(Filters.photo, image))
     dp.add_handler(MessageHandler(Filters.video, vid))
+    dp.add_handler(CommandHandler("health", health))
     updater.start_polling()
     updater.idle()
 
