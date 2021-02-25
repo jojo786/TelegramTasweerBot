@@ -23,5 +23,4 @@ Add the bot to your groups/channels, then make it an Admin to manage PII in your
 3. Store telegram bot credentials in config
 4. Deploy to AWS; Lambda and API GW
 5. Detect cartoon images
-6. Add methods to query health status
-7. Instead of deleting, remove/obscurre faces in images
+6. Instead of deleting, remove/obscurre faces in images
