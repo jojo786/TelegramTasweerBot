@@ -1,11 +1,12 @@
 #TODO: 
 # Dont use polling, so it can deployed as a Lambda
-# Dont save image to file: https://stackoverflow.com/questions/59876271/how-to-process-images-from-telegram-bot-without-saving-to-file
-# Dont store telegram bot credentials in source code
 # Deploy to AWS; Lambda and API GW
+# Dont save image to file: https://stackoverflow.com/questions/59876271/how-to-process-images-from-telegram-bot-without-saving-to-file
 # Detect cartoon images
+# Fix/correct faces in images
 
 from telegram.ext import Updater, InlineQueryHandler, CommandHandler, MessageHandler, Filters
+from pprint import pprint
 import requests
 import re
 import boto3
@@ -31,6 +32,7 @@ def image(update, context):
         print("Found " + found_face + " faces in image from user " + str(chat_user.username) + " in group " + str(chat_group) + ", going to delete")
         #context.bot.send_message(chat_id=chat_id, text="Found " + found_face + " faces, deleting...")
         context.bot.delete_message(chat_id=chat_id, message_id=update.message.message_id)
+        update_db(chat_group, dynamodb=None)
     else:
         print("Found " + found_face + " faces in image, NOT going to delete")
         #context.bot.send_message(chat_id=chat_id, text="Found " + found_face + " faces, NOT deleting...")
@@ -43,16 +45,42 @@ def vid(update, context):
 
     print("Found video from user " + str(chat_user.username) + " in group " + str(chat_group) + ", going to delete")
     context.bot.delete_message(chat_id=chat_id, message_id=update.message.message_id)
+    update_db(chat_group, dynamodb=None)
 
 def health(update, context):
     print("Start health command")
-    update.message.reply_text('Im here')
-    print("STOP health command")
+    update.message.reply_text('Someone called?')
+
+def update_db(group, dynamodb=None):
+    if not dynamodb:
+        dynamodb = boto3.resource('dynamodb', 'eu-west-1')
+
+    table = dynamodb.Table('MuslimPrivacyBot')
+
+    try:
+        response = table.update_item(
+        Key={
+            'group': group
+        },
+        UpdateExpression="set blocked = blocked + :val",
+        ExpressionAttributeValues={
+            ':val': 1
+        },
+        ReturnValues="UPDATED_NEW"
+        )
+    except:
+        response = table.put_item(
+        Item={
+            'group': group,
+            'blocked': 1
+       }
+    )
+
 
 def main():
     TELEGRAM_BOT = os.environ['TELEGRAM_BOT'] 
     updater = Updater(TELEGRAM_BOT)
-    dp = updater.dispatcher
+    dp = updater. dispatcher
     dp.add_handler(MessageHandler(Filters.photo, image))
     dp.add_handler(MessageHandler(Filters.video, vid))
     dp.add_handler(CommandHandler("health", health))
