@@ -55,7 +55,7 @@ def update_db(group, dynamodb=None):
     if not dynamodb:
         dynamodb = boto3.resource('dynamodb', 'eu-west-1')
 
-    table = dynamodb.Table('MuslimPrivacyBot')
+    table = dynamodb.Table('TelegramPrivacyBot')
 
     try:
         response = table.update_item(
