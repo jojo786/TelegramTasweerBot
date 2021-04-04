@@ -1,8 +1,16 @@
-# TelegramPrivacyBot
-Telegram Bot that detects and deletes Personally Identifiable Information (PII).
+Photos of animate objects are impermissible in Islam. This Bot can be used in your Telegram groups and channels to remove pictures and videos of animate objects.
+The following contains more information of the rulings regaring photography:
+- [Is photos permissible in any madhab?](http://muftionline.co.za/node/2245)
+- [Photography & Modern Challenges](http://alhaadi.org.za/articles-publications/books/60-taleemuddeen-publications/1966-photography-a-modern-challenges.html)
+- [The Orchards of Love – Part Ten](https://ihyaauddeen.co.za/?p=16922)
+- [Joint Statement regarding the viewing and usage of TV for propagation purposes](https://sites.google.com/site/duzakpdfs/duzakpdfs/Join_Statement_regarding_TV.pdf?attredirects=0&d=1)
+- [Letter pertaining to the television Issue](https://sites.google.com/site/duzakpdfs/duzakpdfs/letter%20pertaining%20to%20the%20television%20Issue.pdf?attredirects=0&d=1)
+
+# TelegramMooratyBot
+Telegram Bot that detects and deletes representations of animate objects.
 Its written in python, using the [python-telegram-bot](https://pypi.org/project/python-telegram-bot/) telegram bot framework. 
 
-It detects these potential sources of PII:
+It detects these types:
 ## Images
 It uses AWS Rekognition to detect faces in an image, and then deletes.
 
