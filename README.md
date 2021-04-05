@@ -1,9 +1,9 @@
-# TelegramPrivacyBot
+# TelegramTasweerBot
 Telegram Bot that detects and deletes representations of animate objects.
 Its written in python, using the [python-telegram-bot](https://pypi.org/project/python-telegram-bot/) telegram bot framework. 
 
 # Islamic ruling regarding photography
-Photos of animate objects are impermissible in Islam. This Bot can be used in your Telegram groups and channels to remove pictures and videos of animate objects.
+Representations of animate objects are impermissible in Islam. This Bot can be used in your Telegram groups and channels to remove pictures and videos of animate objects.
 The following list contains information from reliable and authentic Ulema regarding photography:
 - [Is photos permissible in any madhab?](http://muftionline.co.za/node/2245)
 - [Photography & Modern Challenges](http://alhaadi.org.za/articles-publications/books/60-taleemuddeen-publications/1966-photography-a-modern-challenges.html)
