@@ -1,5 +1,10 @@
+# TelegramPrivacyBot
+Telegram Bot that detects and deletes representations of animate objects.
+Its written in python, using the [python-telegram-bot](https://pypi.org/project/python-telegram-bot/) telegram bot framework. 
+
+# Islamic ruling regarding photography
 Photos of animate objects are impermissible in Islam. This Bot can be used in your Telegram groups and channels to remove pictures and videos of animate objects.
-The following list contains reliable and authentic rulings regarding photography:
+The following list contains information from reliable and authentic Ulema regarding photography:
 - [Is photos permissible in any madhab?](http://muftionline.co.za/node/2245)
 - [Photography & Modern Challenges](http://alhaadi.org.za/articles-publications/books/60-taleemuddeen-publications/1966-photography-a-modern-challenges.html)
 - [The Orchards of Love – Part Ten](https://ihyaauddeen.co.za/?p=16922)
@@ -16,11 +21,8 @@ The following list contains reliable and authentic rulings regarding photography
 - [Wifaq ul Ulema SA - Photography](https://github.com/jojo786/TelegramPrivacyBot/blob/main/Photography%20-%20Wifaqul%20Ulama%20SA.jpg)
 - [Wifaqul Madaaris - Announcement](https://github.com/jojo786/TelegramPrivacyBot/blob/main/Photography%20announcement-3.pdf)
 
-# TelegramMooratyBot
-Telegram Bot that detects and deletes representations of animate objects.
-Its written in python, using the [python-telegram-bot](https://pypi.org/project/python-telegram-bot/) telegram bot framework. 
 
-It detects these types:
+It detects these types of objects in a telegram channel/group:
 ## Images
 It uses AWS Rekognition to detect faces in an image, and then deletes.
 
