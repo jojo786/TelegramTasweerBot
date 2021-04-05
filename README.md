@@ -20,6 +20,7 @@ The following list contains information from reliable and authentic Ulema regard
 - [2019 - Announcement regarding Photography](https://ia803006.us.archive.org/35/items/Madrasah_Taleemudden_Jalsah_2019/03_Important_Announcement_Ml_Ismail_Bayat.mp3)
 - [Wifaq ul Ulema SA - Photography](https://github.com/jojo786/TelegramPrivacyBot/blob/main/Photography%20-%20Wifaqul%20Ulama%20SA.jpg)
 - [Wifaqul Madaaris - Announcement](https://github.com/jojo786/TelegramPrivacyBot/blob/main/Photography%20announcement-3.pdf)
+- [Using Emojis](http://muftionline.co.za/node/32294)
 
 
 It detects these types of objects in a telegram channel/group:
@@ -47,6 +48,7 @@ Add the bot to your groups/channels, then make it an Admin to manage PII in your
 7. Detect and remove images sent as file
 8. Filter and detect a list of URLs, e.g youtube.com
 9. Analyse inline images that accompany URLs/links
+10. Detect and delete emojis 
 
 # Other AWS Options
 1. [Image Moderation Chatbot](https://serverlessrepo.aws.amazon.com/applications/arn:aws:serverlessrepo:us-east-1:426111819794:applications~image-moderation-chatbot)
