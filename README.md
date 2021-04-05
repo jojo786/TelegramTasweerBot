@@ -1,5 +1,5 @@
 Photos of animate objects are impermissible in Islam. This Bot can be used in your Telegram groups and channels to remove pictures and videos of animate objects.
-The following list contains information of the rulings regaring photography:
+The following list contains reliable and authentic rulings regarding photography:
 - [Is photos permissible in any madhab?](http://muftionline.co.za/node/2245)
 - [Photography & Modern Challenges](http://alhaadi.org.za/articles-publications/books/60-taleemuddeen-publications/1966-photography-a-modern-challenges.html)
 - [The Orchards of Love – Part Ten](https://ihyaauddeen.co.za/?p=16922)
