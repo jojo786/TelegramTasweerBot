@@ -18,6 +18,7 @@ The following list contains information from reliable and authentic Ulema regard
 - [2017 - Announcement regarding Photography](https://ia801602.us.archive.org/35/items/Madrasah_Taleemuddeen_Jalsa_2017/04_Important_Announcement.mp3)
 - [2018 - Announcement regarding Photography](https://ia803107.us.archive.org/24/items/Madrasah_Taleemuddeen_Jalsa_2018/03_Important_Announcement.mp3)
 - [2019 - Announcement regarding Photography](https://ia803006.us.archive.org/35/items/Madrasah_Taleemudden_Jalsah_2019/03_Important_Announcement_Ml_Ismail_Bayat.mp3)
+- [2021 - Announcement regarding Photography](https://ia801507.us.archive.org/11/items/madrasah_taleemudden_jalsah_2021/08_Important_Announcement.mp3)
 - [Wifaq ul Ulema SA - Photography](https://github.com/jojo786/TelegramPrivacyBot/blob/main/Photography%20-%20Wifaqul%20Ulama%20SA.jpg)
 - [Wifaqul Madaaris - Announcement](https://github.com/jojo786/TelegramPrivacyBot/blob/main/Photography%20announcement-3.pdf)
 - [Using Emojis](http://muftionline.co.za/node/32294)
