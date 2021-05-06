@@ -11,6 +11,7 @@ import requests
 import re
 import boto3
 import os
+import emoji
 
 def image(update, context):
     print("Start processing image")
@@ -49,13 +50,13 @@ def vid(update, context):
 
 def health(update, context):
     print("Start health command")
-    update.message.reply_text('Someone called?')
+    update.message.reply_text('Was-salaam')
 
 def update_db(group, dynamodb=None):
     if not dynamodb:
         dynamodb = boto3.resource('dynamodb', 'eu-west-1')
 
-    table = dynamodb.Table('TelegramPrivacyBot')
+    table = dynamodb.Table('MuslimPrivacyBot')
 
     try:
         response = table.update_item(
@@ -76,14 +77,30 @@ def update_db(group, dynamodb=None):
        }
     )
 
+def emoji_handler(update, context):
+    print("Start processing emoji")
+
+    emoji_allowlist = "👍📖📚👆🏼👆📍📢🍞🕌⬆"
+    chat_id = update.message.chat_id
+    chat_text = update.message.text
+    
+    #print ("BEFORE: " + chat_text)
+    context.bot.delete_message(chat_id=chat_id, message_id=update.message.message_id)
+
+    chat_text_noemoji = emoji.demojize(chat_text)
+    context.bot.send_message(chat_id=chat_id, text=chat_text_noemoji)
+    print ("AFTER: " + chat_text_noemoji)
 
 def main():
-    TELEGRAM_BOT = os.environ['TELEGRAM_BOT'] 
+    TELEGRAM_BOT = os.environ['TELEGRAM_BOT']
+    emoji_blocklist = "['\U0001F600-\U0001F64B]"
+
     updater = Updater(TELEGRAM_BOT)
     dp = updater. dispatcher
     dp.add_handler(MessageHandler(Filters.photo, image))
     dp.add_handler(MessageHandler(Filters.video, vid))
     dp.add_handler(CommandHandler("health", health))
+    dp.add_handler(MessageHandler(Filters.regex(emoji_blocklist), emoji_handler))
     updater.start_polling()
     updater.idle()
 
