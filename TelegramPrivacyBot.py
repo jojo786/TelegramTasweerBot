@@ -80,16 +80,19 @@ def update_db(group, dynamodb=None):
 def emoji_handler(update, context):
     print("Start processing emoji")
 
-    emoji_allowlist = "👍📖📚👆🏼👆📍📢🍞🕌⬆"
     chat_id = update.message.chat_id
+    chat_user = update.message.from_user
+    chat_group = update.message.chat.title
     chat_text = update.message.text
     
     #print ("BEFORE: " + chat_text)
+    print("Found emoji from user " + str(chat_user.username) + " in group " + str(chat_group) + ", going to delete")
     context.bot.delete_message(chat_id=chat_id, message_id=update.message.message_id)
 
-    chat_text_noemoji = emoji.demojize(chat_text)
-    context.bot.send_message(chat_id=chat_id, text=chat_text_noemoji)
-    print ("AFTER: " + chat_text_noemoji)
+    if (len(chat_text) > 1):
+        chat_text_noemoji = emoji.demojize(chat_text)
+        context.bot.send_message(chat_id=chat_id, text= "Message from " + str(chat_user.first_name) + " " +  str(chat_user.last_name) + ": \n " + chat_text_noemoji)
+        print ("AFTER removing emoji: " + chat_text_noemoji)
 
 def main():
     TELEGRAM_BOT = os.environ['TELEGRAM_BOT']
