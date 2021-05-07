@@ -96,7 +96,7 @@ def emoji_handler(update, context):
 
 def main():
     TELEGRAM_BOT = os.environ['TELEGRAM_BOT']
-    emoji_blocklist = "['\U0001F600-\U0001F64B]"
+    emoji_blocklist = "[\U0001F600-\U0001F64B]"
 
     updater = Updater(TELEGRAM_BOT)
     dp = updater. dispatcher
