@@ -14,14 +14,19 @@ import os
 import emoji
 
 def image(update, context):
-    print("Start processing image")
+    print("Start processing image:")
 
     chat_id = update.message.chat_id
     chat_user = update.message.from_user
     chat_group = update.message.chat.title
     #context.bot.send_message(chat_id=chat_id, text="Detected image")
 
-    file = context.bot.getFile(update.message.photo[-1].file_id)
+    if (update.message.photo):
+        file = context.bot.getFile(update.message.photo[-1].file_id)
+    
+    if (update.message.document):
+        file = context.bot.getFile(update.message.document.file_id)
+    
     file.download('image.jpg')
     with open("image.jpg", 'rb') as image_file:
             image_face = {'Bytes': image_file.read()}
@@ -100,8 +105,8 @@ def main():
 
     updater = Updater(TELEGRAM_BOT)
     dp = updater. dispatcher
-    dp.add_handler(MessageHandler(Filters.photo, image))
-    dp.add_handler(MessageHandler(Filters.video, vid))
+    dp.add_handler(MessageHandler(Filters.photo | Filters.document.image | Filters.document.jpg, image))
+    dp.add_handler(MessageHandler(Filters.video | Filters.document.mime_type("video/mp4"), vid))
     dp.add_handler(CommandHandler("health", health))
     dp.add_handler(MessageHandler(Filters.regex(emoji_blocklist), emoji_handler))
     updater.start_polling()
