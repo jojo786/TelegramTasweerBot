@@ -20,10 +20,10 @@ def image(update, context):
     chat_group = update.message.chat.title
     #context.bot.send_message(chat_id=chat_id, text="Detected image")
 
-    if (update.message.photo):
+    if (update.message.photo): # a photo, not a document
         file = context.bot.getFile(update.message.photo[-1].file_id)
     
-    if (update.message.document):
+    if (update.message.document): # a document, not a photo
         file = context.bot.getFile(update.message.document.file_id)
     
     file.download('image.jpg')
@@ -39,7 +39,7 @@ def image(update, context):
         context.bot.delete_message(chat_id=chat_id, message_id=update.message.message_id)
         update_db(chat_group, dynamodb=None)
     else:
-        print(date + " - Found " + found_face + " faces in image, NOT going to delete")
+        print(date + " - Found " + found_face + " faces in image from user " + str(chat_user.username) + " in group " + str(chat_group) + ", NOT going to delete")
         #context.bot.send_message(chat_id=chat_id, text="Found " + found_face + " faces, NOT deleting...")
 
 def vid(update, context):
@@ -96,7 +96,7 @@ def emoji_handler(update, context):
     print(date + " - Found emoji from user " + str(chat_user.username) + " in group " + str(chat_group) + ", going to delete")
     context.bot.delete_message(chat_id=chat_id, message_id=update.message.message_id)
 
-    if (len(chat_text) > 1):
+    if (len(chat_text) > 1): #if len = 1, then this is only an emoji, so no need to repost it, as there is no message
         chat_text_noemoji = emoji.demojize(chat_text)
         context.bot.send_message(chat_id=chat_id, text= "Message from " + str(chat_user.first_name) + " " +  str(chat_user.last_name) + ": \n " + chat_text_noemoji)
         print (date + " - AFTER removing emoji: " + chat_text_noemoji)
@@ -107,8 +107,8 @@ def main():
 
     updater = Updater(TELEGRAM_BOT)
     dp = updater. dispatcher
-    dp.add_handler(MessageHandler(Filters.photo | Filters.document.image | Filters.document.jpg, image))
-    dp.add_handler(MessageHandler(Filters.video | Filters.document.mime_type("video/mp4"), vid))
+    dp.add_handler(MessageHandler(Filters.photo | Filters.document.image | Filters.document.jpg, image)) #to catch inline photos, and photos as attachements/files
+    dp.add_handler(MessageHandler(Filters.video | Filters.document.mime_type("video/mp4"), vid)) #to catch inline vidoes, and videos as attachements/files
     dp.add_handler(CommandHandler("health", health))
     dp.add_handler(MessageHandler(Filters.regex(emoji_blocklist), emoji_handler))
     updater.start_polling()
