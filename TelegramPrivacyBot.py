@@ -6,15 +6,14 @@
 # Fix/correct faces in images
 
 from telegram.ext import Updater, InlineQueryHandler, CommandHandler, MessageHandler, Filters
-from pprint import pprint
-import requests
-import re
 import boto3
 import os
 import emoji
+from datetime import datetime
 
 def image(update, context):
-    print("Start processing image:")
+    date = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
+    print(date + " - Start processing image:")
 
     chat_id = update.message.chat_id
     chat_user = update.message.from_user
@@ -35,26 +34,28 @@ def image(update, context):
     
     found_face = str({len(response['FaceDetails'])})
     if response['FaceDetails']:
-        print("Found " + found_face + " faces in image from user " + str(chat_user.username) + " in group " + str(chat_group) + ", going to delete")
+        print(date + " - Found " + found_face + " faces in image from user " + str(chat_user.username) + " in group " + str(chat_group) + ", going to delete")
         #context.bot.send_message(chat_id=chat_id, text="Found " + found_face + " faces, deleting...")
         context.bot.delete_message(chat_id=chat_id, message_id=update.message.message_id)
         update_db(chat_group, dynamodb=None)
     else:
-        print("Found " + found_face + " faces in image, NOT going to delete")
+        print(date + " - Found " + found_face + " faces in image, NOT going to delete")
         #context.bot.send_message(chat_id=chat_id, text="Found " + found_face + " faces, NOT deleting...")
 
 def vid(update, context):
-    print("Start processing video")
+    date = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
+    print(date + " - Start processing video")
     chat_id = update.message.chat_id
     chat_user = update.message.from_user
     chat_group = update.message.chat.title
 
-    print("Found video from user " + str(chat_user.username) + " in group " + str(chat_group) + ", going to delete")
+    print(date + " - Found video from user " + str(chat_user.username) + " in group " + str(chat_group) + ", going to delete")
     context.bot.delete_message(chat_id=chat_id, message_id=update.message.message_id)
     update_db(chat_group, dynamodb=None)
 
 def health(update, context):
-    print("Start health command")
+    date = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
+    print(date + " - Start health command")
     update.message.reply_text('Was-salaam')
 
 def update_db(group, dynamodb=None):
@@ -83,7 +84,8 @@ def update_db(group, dynamodb=None):
     )
 
 def emoji_handler(update, context):
-    print("Start processing emoji")
+    date = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
+    print(date + " - Start processing emoji")
 
     chat_id = update.message.chat_id
     chat_user = update.message.from_user
@@ -91,13 +93,13 @@ def emoji_handler(update, context):
     chat_text = update.message.text
     
     #print ("BEFORE: " + chat_text)
-    print("Found emoji from user " + str(chat_user.username) + " in group " + str(chat_group) + ", going to delete")
+    print(date + " - Found emoji from user " + str(chat_user.username) + " in group " + str(chat_group) + ", going to delete")
     context.bot.delete_message(chat_id=chat_id, message_id=update.message.message_id)
 
     if (len(chat_text) > 1):
         chat_text_noemoji = emoji.demojize(chat_text)
         context.bot.send_message(chat_id=chat_id, text= "Message from " + str(chat_user.first_name) + " " +  str(chat_user.last_name) + ": \n " + chat_text_noemoji)
-        print ("AFTER removing emoji: " + chat_text_noemoji)
+        print (date + " - AFTER removing emoji: " + chat_text_noemoji)
 
 def main():
     TELEGRAM_BOT = os.environ['TELEGRAM_BOT']
