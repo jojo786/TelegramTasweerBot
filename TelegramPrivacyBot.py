@@ -98,20 +98,30 @@ def emoji_handler(update, context):
 
     if (len(chat_text) > 1): #if len = 1, then this is only an emoji, so no need to repost it, as there is no message text
         chat_text_noemoji = emoji.demojize(chat_text)
-        context.bot.send_message(chat_id=chat_id, text= "Message from " + str(chat_user.first_name) + " " +  str(chat_user.last_name) + ": \n " + chat_text_noemoji)
+        last_name = str(chat_user.last_name) 
+        if (last_name == "None"): # some users dont have a Last Name set in Telegram, so it displays as None. In which case, instead of showing None, just blank it out
+            last_name = ""
+        context.bot.send_message(chat_id=chat_id, text= "Message from " + str(chat_user.first_name) + " " +  last_name + ": \n " + chat_text_noemoji)
         print (date + " - AFTER removing emoji: " + chat_text_noemoji)
+
+    update_db(chat_group, dynamodb=None)
+
+def url_handler(update, context):
+    date = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
+    print(date + " - Start processing URL links")
 
 
 def main():
     TELEGRAM_BOT = os.environ['TELEGRAM_BOT']
     emoji_blocklist = "[\U0001F600-\U0001F64B|\U0001F937|\U0001F483|\U0001F435|\U0001F412]" #Catches most of the F600 faces-range (except the last few which is the hands emojis). F937 is person shrugging, 1F483 is woman dancing, U0001F435 and 1F412 are monkey
-    #emoji_blocklist = "[\U0001F300-\U0001F5FF|\U0001F600-\U0001F64F|\U0001F680-\U0001F6FF|\u2600-\u26FF\u2700-\u27BF]"
+    #emoji_blocklist = "[\U0001F300-\U0001F5FF|\U0001F600-\U0001F64F|\U0001F680-\U0001F6FF|\u2600-\u26FF\u2700-\u27BF]" #almost the full emoji range - but this will block hands, etc
     updater = Updater(TELEGRAM_BOT)
     dp = updater. dispatcher
     dp.add_handler(MessageHandler(Filters.photo | Filters.document.image | Filters.document.jpg, image)) #to catch inline photos, and photos as attachements/files
     dp.add_handler(MessageHandler(Filters.video | Filters.document.mime_type("video/mp4"), vid)) #to catch inline vidoes, and videos as attachements/files
     dp.add_handler(CommandHandler("health", health))
     dp.add_handler(MessageHandler(Filters.regex(emoji_blocklist), emoji_handler))
+    dp.add_handler(MessageHandler(Filters.entity("youtube.com"), url_handler))
     updater.start_polling()
     updater.idle()
 
