@@ -2,7 +2,6 @@
 # Dont use polling, so it can deployed as a Lambda
 # Deploy to AWS; Lambda and API GW
 # Dont save image to file: https://stackoverflow.com/questions/59876271/how-to-process-images-from-telegram-bot-without-saving-to-file
-# Detect cartoon images
 # Fix/correct faces in images
 
 from telegram.ext import Updater, InlineQueryHandler, CommandHandler, MessageHandler, Filters
@@ -10,6 +9,7 @@ import boto3
 import os
 import emoji
 from datetime import datetime
+#import MessageEntity
 
 def image(update, context):
     date = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
@@ -96,15 +96,16 @@ def emoji_handler(update, context):
     print(date + " - Found emoji from user " + str(chat_user.username) + " in group " + str(chat_group) + ", going to delete")
     context.bot.delete_message(chat_id=chat_id, message_id=update.message.message_id)
 
-    if (len(chat_text) > 1): #if len = 1, then this is only an emoji, so no need to repost it, as there is no message
+    if (len(chat_text) > 1): #if len = 1, then this is only an emoji, so no need to repost it, as there is no message text
         chat_text_noemoji = emoji.demojize(chat_text)
         context.bot.send_message(chat_id=chat_id, text= "Message from " + str(chat_user.first_name) + " " +  str(chat_user.last_name) + ": \n " + chat_text_noemoji)
         print (date + " - AFTER removing emoji: " + chat_text_noemoji)
 
+
 def main():
     TELEGRAM_BOT = os.environ['TELEGRAM_BOT']
-    emoji_blocklist = "[\U0001F600-\U0001F64B]"
-
+    emoji_blocklist = "[\U0001F600-\U0001F64B|\U0001F937|\U0001F483|\U0001F435|\U0001F412]" #Catches most of the F600 faces-range (except the last few which is the hands emojis). F937 is person shrugging, 1F483 is woman dancing, U0001F435 and 1F412 are monkey
+    #emoji_blocklist = "[\U0001F300-\U0001F5FF|\U0001F600-\U0001F64F|\U0001F680-\U0001F6FF|\u2600-\u26FF\u2700-\u27BF]"
     updater = Updater(TELEGRAM_BOT)
     dp = updater. dispatcher
     dp.add_handler(MessageHandler(Filters.photo | Filters.document.image | Filters.document.jpg, image)) #to catch inline photos, and photos as attachements/files
