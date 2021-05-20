@@ -31,6 +31,8 @@ def image(update, context):
             image_face = {'Bytes': image_file.read()}
     rekognition = boto3.client('rekognition')
     response = rekognition.detect_faces(Image=image_face, Attributes=['DEFAULT'])
+
+    os.remove("image.jpg") #delete the file once its already processed
     
     found_face = str({len(response['FaceDetails'])})
     if response['FaceDetails']:
