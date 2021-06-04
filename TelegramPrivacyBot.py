@@ -116,7 +116,7 @@ def url_handler(update, context):
 
 def main():
     TELEGRAM_BOT = os.environ['TELEGRAM_BOT']
-    emoji_blocklist = "[\U0001F600-\U0001F64B|\U0001F937|\U0001F483|\U0001F435|\U0001F412]" #Catches most of the F600 faces-range (except the last few which is the hands emojis). F937 is person shrugging, 1F483 is woman dancing, U0001F435 and 1F412 are monkey
+    emoji_blocklist = "[\U0001F600-\U0001F64B|\U0001F937|\U0001F483|\U0001F435|\U0001F412|\U0001F920-\U0001F92F|\U0001F910-\U0001F917]" #Catches most of the F600 faces-range (except the last few which is the hands emojis). F937 is person shrugging, 1F483 is woman dancing, 1F435 and 1F412 are monkey. Catches some parts of the 1F900 range
     #emoji_blocklist = "[\U0001F300-\U0001F5FF|\U0001F600-\U0001F64F|\U0001F680-\U0001F6FF|\u2600-\u26FF\u2700-\u27BF]" #almost the full emoji range - but this will block hands, etc
     updater = Updater(TELEGRAM_BOT)
     dp = updater. dispatcher
