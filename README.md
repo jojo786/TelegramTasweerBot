@@ -41,7 +41,7 @@ This bot only has handlers for video and images, and a limited regex for emojoi,
 
 # How to run it
 Install the python requirements with pip, and then run it with python.
-It picks up your telegram bot token from environment variables. AWS credentials also picked up from environment variables.
+It picks up your telegram bot token from environment variables. E.g. running `export TELEGRAM_BOT=12334342:ABCD124324234` on Linux/macos should be sufficient. AWS credentials also picked up from environment variables.
 Add the bot to your groups/channels, then make it an Admin to manage PII in your channels/groups
 
 # TODO: 
