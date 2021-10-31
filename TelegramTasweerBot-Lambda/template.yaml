@@ -1,0 +1,49 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: >
+  TelegramTasweerBot-Lambda
+
+Globals:
+  Function:
+    Timeout: 3
+
+Parameters:
+    TelegramBotToken: 
+        Description: 'Required. Token for your telegram bot'
+        Type: 'String'
+
+Resources:
+  TelegramTasweerBotFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: telegram_bot/
+      Handler: TelegramTasweerBot-Lambda.lambda_handler
+      Runtime: python3.9
+      Environment:
+        Variables:
+          TelegramBotToken: !Ref TelegramBotToken 
+      MemorySize: 180
+      Policies:
+        - DynamoDBWritePolicy:
+            TableName: !Ref TelegramTasweerBotTable
+        - RekognitionDetectOnlyPolicy: {}
+      Architectures:
+        - x86_64
+      Events:
+        TelegramWebHook:
+          Type: Api 
+          Properties:
+            Path: /
+            Method: any
+  TelegramTasweerBotTable:
+    Type: AWS::Serverless::SimpleTable
+    Properties:
+      PrimaryKey:
+        Name: group
+        Type: String
+      TableName: TelegramTasweerBot 
+
+Outputs:
+  TelegramApi:
+    Description: "API Gateway endpoint URL for Prod stage for TelegramTasweerBot function"
+    Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/"
