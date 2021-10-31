@@ -1,6 +1,6 @@
 # TelegramTasweerBot
 Telegram Bot that detects and deletes representations of animate objects. It could be used to remove personally identifiable information (PII) from telegram.
-Its written in python, using the [python-telegram-bot](https://pypi.org/project/python-telegram-bot/) telegram bot framework. It currently runs as a standalone python program.
+Its written in python 3, using the [python-telegram-bot](https://pypi.org/project/python-telegram-bot/) telegram bot framework. It runs on AWS Lambda, or as a standalone python program.
 
 # Islamic ruling regarding photography
 Representations of animate objects are impermissible in Islam. This Bot can be used in your Telegram groups and channels to remove pictures and videos of animate objects.
@@ -40,19 +40,28 @@ Other usefull resouces is [this](https://stackoverflow.com/questions/31430587/ho
 This bot only has handlers for video and images, and a limited regex for emojoi, so it does not have access to most Telegram messages.
 
 # How to run it
-Install the python requirements with pip, and then run it with python.
-It picks up your telegram bot token from environment variables. E.g. running `export TELEGRAM_BOT=12334342:ABCD124324234` on Linux/macos should be sufficient. AWS credentials also picked up from environment variables.
-Add the bot to your groups/channels, then make it an Admin to manage PII in your channels/groups
+- Create your bot using [BotFather](https://core.telegram.org/bots#3-how-do-i-create-a-bot), and note the token, e.g. `12334342:ABCD124324234`
+- Add the bot to your groups/channels, then make it an Admin to manage PII in your channels/groups
+
+## AWS Serverless
+- Install [AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/install-cliv2.html), and  [configure it](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-quickstart.html#cli-configure-quickstart-config)
+- Install [AWS SAM CLI](https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/serverless-sam-cli-install.html)
+- Run `sam build && sam deploy --parameter-overrides TelegramBotToken=12334342:ABCD124324234` where `12334342:ABCD124324234` is the token from BotFather
+- Note the Outputs from the above `sam deploy` command, which will include the Value of the TelegramApi, which is the AWS Gateway endpoint, e.g. `https://1fgfgfd56.execute-api.eu-west-1.amazonaws.com/Prod` 
+- Update your Telegram bot to change from polling to [Webhook](https://core.telegram.org/bots/api#setwebhook), by pasting this URL in your browser, or curl'ing it: `https://api.telegram.org/bot12334342:ABCD124324234/setWebHook?url=https://1fgfgfd56.execute-api.eu-west-1.amazonaws.com/Prod/`. Use your bot token and API GW endpoint. You can check that it was set correctly by going to `https://api.telegram.org/bot12334342:ABCD124324234/getWebhookInfo`, which should include the `url` of your AWS API GW, as well as any errors Telegram is encounterting calling your bot on that API.
+
+## Standalone python script
+- It picks up your telegram bot token from environment variables. E.g. running `export TELEGRAM_BOT=12334342:ABCD124324234` on Linux/macos should be sufficient. AWS credentials also picked up from environment variables.
+- Install the python requirements with pip, and then run it with python, e.g `python3 TelegramPrivacyBot.py &`
+
 
 # TODO: 
-1. Dont use polling, so it can deployed as a Lambda
+1. Store telegram bot credentials in AWS Security Manager
 2. Dont save image to file: https://stackoverflow.com/questions/59876271/how-to-process-images-from-telegram-bot-without-saving-to-file
-3. Store telegram bot credentials in config
-4. Deploy to AWS; Lambda and API GW
-5. Detect cartoon images
-6. Instead of deleting, remove/obscurre faces in images
-7. Filter and detect a list of URLs, e.g youtube.com
-8. Analyse inline images that accompany URLs/links
+3. Detect cartoon images
+4. Instead of deleting, remove/obscurre faces in images: https://aws.amazon.com/blogs/compute/creating-a-serverless-face-blurring-service-for-photos-in-amazon-s3/ 
+5. Filter and detect a list of URLs, e.g youtube.com
+6. Analyse inline images that accompany URLs/links
 
 # Other AWS Options
 1. [Image Moderation Chatbot](https://serverlessrepo.aws.amazon.com/applications/arn:aws:serverlessrepo:us-east-1:426111819794:applications~image-moderation-chatbot)

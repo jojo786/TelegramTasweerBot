@@ -1,8 +1,7 @@
 #TODO: 
-# Dont use polling, so it can deployed as a Lambda
-# Deploy to AWS; Lambda and API GW
+# control URLs, like youtube, and images from links
 # Dont save image to file: https://stackoverflow.com/questions/59876271/how-to-process-images-from-telegram-bot-without-saving-to-file
-# Fix/correct faces in images
+# Fix/correct faces in images: https://aws.amazon.com/blogs/compute/creating-a-serverless-face-blurring-service-for-photos-in-amazon-s3/
 
 from telegram.ext import Updater, InlineQueryHandler, CommandHandler, MessageHandler, Filters
 import boto3
