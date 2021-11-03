@@ -23,6 +23,7 @@ Resources:
         Variables:
           TelegramBotToken: !Ref TelegramBotToken 
       MemorySize: 1024
+      ReservedConcurrentExecutions: 10
       Policies:
         - DynamoDBWritePolicy:
             TableName: !Ref TelegramTasweerBotTable
