@@ -2,6 +2,8 @@
 Telegram Bot that detects and deletes representations of animate objects. It could be used to remove personally identifiable information (PII) from telegram.
 Its written in python 3, using the [python-telegram-bot](https://pypi.org/project/python-telegram-bot/) telegram bot framework. It runs on AWS Lambda, or as a standalone python program.
 
+Read the [blog post](https://hacksaw.co.za/blog/running-a-telegram-bot-on-aws-lambda/)
+
 # Islamic ruling regarding photography
 Representations of animate objects are impermissible in Islam. This Bot can be used in your Telegram groups and channels to remove pictures and videos of animate objects.
 The following list contains information from reliable and authentic Ulema regarding photography:
