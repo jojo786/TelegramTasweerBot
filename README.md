@@ -2,7 +2,10 @@
 Telegram Bot that detects and deletes representations of animate objects. It could be used to remove personally identifiable information (PII) from telegram.
 Its written in python 3, using the [python-telegram-bot](https://pypi.org/project/python-telegram-bot/) telegram bot framework. It runs on AWS Lambda, or as a standalone python program.
 
-Read the [blog post](https://hacksaw.co.za/blog/running-a-telegram-bot-on-aws-lambda/)
+Read my [blog post](https://hacksaw.co.za/blog/running-a-telegram-bot-on-aws-lambda/).
+
+# Architecture
+![architecture](docs/TelegramTasweerBot-Architecture.png)
 
 # Islamic ruling regarding photography
 Representations of animate objects are impermissible in Islam. This Bot can be used in your Telegram groups and channels to remove pictures and videos of animate objects.
@@ -21,8 +24,8 @@ The following list contains information from reliable and authentic Ulema regard
 - [2018 - Announcement regarding Photography](https://ia803107.us.archive.org/24/items/Madrasah_Taleemuddeen_Jalsa_2018/03_Important_Announcement.mp3)
 - [2019 - Announcement regarding Photography](https://ia803006.us.archive.org/35/items/Madrasah_Taleemudden_Jalsah_2019/03_Important_Announcement_Ml_Ismail_Bayat.mp3)
 - [2021 - Announcement regarding Photography](https://ia801507.us.archive.org/11/items/madrasah_taleemudden_jalsah_2021/08_Important_Announcement.mp3)
-- [Wifaq ul Ulema SA - Photography](https://github.com/jojo786/TelegramPrivacyBot/blob/main/Photography%20-%20Wifaqul%20Ulama%20SA.jpg)
-- [Wifaqul Madaaris - Announcement](https://github.com/jojo786/TelegramPrivacyBot/blob/main/Photography%20announcement-3.pdf)
+- [Wifaq ul Ulema SA - Photography](docs/Photography%20-%20Wifaqul%20Ulama%20SA.jpg)
+- [Wifaqul Madaaris - Announcement](docs/Photography%20announcement-3.pdf)
 - [Using Emojis](http://muftionline.co.za/node/32294)
 
 
