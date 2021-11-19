@@ -42,11 +42,12 @@ Emojis are part of telegram text messages, but we did'nt want the bot to access 
 Other usefull resouces is [this](https://stackoverflow.com/questions/31430587/how-to-send-emoji-with-telegram-bot-api) and [this](https://stackoverflow.com/questions/24840667/what-is-the-regex-to-extract-all-the-emojis-from-a-string), as well as this [regex tester](https://www.regextester.com/106421). 
 
 # Privacy
-This bot only has handlers for video and images, and a limited regex for emojoi, so it does not have access to most Telegram messages.
+This bot only has handlers for video and images, and a limited regex for emoji, so it does not have access to most Telegram messages.
 
 # How to run it
 - Create your bot using [BotFather](https://core.telegram.org/bots#3-how-do-i-create-a-bot), and note the token, e.g. `12334342:ABCD124324234`
 - Add the bot to your groups/channels, then make it an Admin to manage PII in your channels/groups
+- Decide between running it on AWS Lambda, or as a standalone python script
 
 ## AWS Serverless
 - Install [AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/install-cliv2.html), and  [configure it](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-quickstart.html#cli-configure-quickstart-config)
