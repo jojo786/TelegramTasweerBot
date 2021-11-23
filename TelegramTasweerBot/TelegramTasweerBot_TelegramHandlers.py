@@ -5,6 +5,8 @@ import emoji
 from datetime import datetime
 #import MessageEntity
 
+bot_table = boto3.resource("dynamodb", region_name="eu-west-1").Table(os.environ["TelegramTasweerBotTable"])
+
 def health(update, context):
     date = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
     print(date + " - Start health command")
@@ -65,7 +67,7 @@ def update_db(group, dynamodb=None):
     if not dynamodb:
         dynamodb = boto3.resource('dynamodb', 'eu-west-1')
 
-    table = dynamodb.Table('TelegramTasweerBot')
+    table = dynamodb.Table(bot_table)
 
     try:
         response = table.update_item(

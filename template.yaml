@@ -8,9 +8,18 @@ Globals:
     Timeout: 3
 
 Parameters:
-    TelegramBotToken: 
-        Description: 'Required. Token for your telegram bot'
-        Type: 'String'
+    StageEnv:
+      Type: String
+      AllowedValues:
+        - dev
+        - prod
+
+Mappings:
+  StageMappings:
+    dev:
+      stage: dev
+    prod:
+      stage: prod
 
 Resources:
   TelegramTasweerBotFunction:
@@ -22,6 +31,7 @@ Resources:
       Environment:
         Variables:
           TelegramBotToken: !Ref TelegramBotToken 
+          TelegramTasweerBotTable: !Ref TelegramTasweerBotTable
       MemorySize: 1024
       ReservedConcurrentExecutions: 10
       Policies:
@@ -42,7 +52,7 @@ Resources:
       PrimaryKey:
         Name: group
         Type: String
-      TableName: TelegramTasweerBot 
+      #TableName: TelegramTasweerBot 
 
 Outputs:
   TelegramApi:

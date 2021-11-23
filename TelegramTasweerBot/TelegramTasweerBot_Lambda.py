@@ -6,8 +6,13 @@ import os
 import emoji
 from datetime import datetime
 from TelegramTasweerBot_TelegramHandlers import health, image, emoji_handler, vid, url_handler
+from aws_lambda_powertools.utilities import parameters
 
-TelegramBotToken = os.environ['TelegramBotToken']
+ssm_provider = parameters.SSMProvider()
+
+stage = os.environ['stage']
+TelegramBotToken = ssm_provider.get("/telegramtasweerbot/telegram/"+stage+"/bottoken", decrypt=True)
+
 bot = Bot(token=TelegramBotToken)
 dispatcher = Dispatcher(bot, None, use_context=True)
 
