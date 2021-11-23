@@ -38,6 +38,16 @@ Resources:
         - DynamoDBWritePolicy:
             TableName: !Ref TelegramTasweerBotTable
         - RekognitionDetectOnlyPolicy: {}
+        - Statement:
+          -
+            Effect: "Allow"
+            Action:
+              - ssm:GetParameters
+              - ssm:GetParameter
+              - ssm:GetParametersByPath
+            Resource:
+              - '*'
+              - 'arn:aws:ssm:::parameter/telegramtasweerbot/*'
       Architectures:
         - x86_64
       Events:

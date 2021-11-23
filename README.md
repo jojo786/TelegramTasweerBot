@@ -64,12 +64,11 @@ This bot only has handlers for video and images, and a limited regex for emoji, 
 
 
 # TODO: 
-1. Store telegram bot credentials in AWS Security Manager
-2. Dont save image to file: https://stackoverflow.com/questions/59876271/how-to-process-images-from-telegram-bot-without-saving-to-file
-3. Detect cartoon images
-4. Instead of deleting, remove/obscurre faces in images: https://aws.amazon.com/blogs/compute/creating-a-serverless-face-blurring-service-for-photos-in-amazon-s3/ 
-5. Filter and detect a list of URLs, e.g youtube.com
-6. Analyse inline images that accompany URLs/links
+- Dont save image to file: https://stackoverflow.com/questions/59876271/how-to-process-images-from-telegram-bot-without-saving-to-file
+- Detect cartoon images
+- Instead of deleting, remove/obscurre faces in images: https://aws.amazon.com/blogs/compute/creating-a-serverless-face-blurring-service-for-photos-in-amazon-s3/ 
+- Filter and detect a list of URLs, e.g youtube.com
+- Analyse inline images that accompany URLs/links
 
 # Other AWS Options
 1. [Image Moderation Chatbot](https://serverlessrepo.aws.amazon.com/applications/arn:aws:serverlessrepo:us-east-1:426111819794:applications~image-moderation-chatbot)
