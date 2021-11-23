@@ -30,7 +30,7 @@ Resources:
       Runtime: python3.9
       Environment:
         Variables:
-          TelegramBotToken: !Ref TelegramBotToken 
+          stage: !FindInMap [StageMappings, !Ref StageEnv, stage]
           TelegramBotDynamoTable: !Ref TelegramTasweerBotTable
       MemorySize: 1024
       ReservedConcurrentExecutions: 10
