@@ -63,9 +63,9 @@ def health(update, context):
     print(date + " - Start health command")
     update.message.reply_text('Was-salaam')
 
-def update_db(group, dynamodb=None):
-    if not dynamodb:
-        dynamodb = boto3.resource('dynamodb', 'eu-west-1')
+def update_db(group, bot_table=None):
+    if not bot_table:
+        dynamodb = boto3.resource("dynamodb", region_name="eu-west-1").Table(os.environ["TelegramBotDynamoTable"])
 
     table = dynamodb.Table(bot_table)
 

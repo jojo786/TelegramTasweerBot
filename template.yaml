@@ -62,7 +62,6 @@ Resources:
       PrimaryKey:
         Name: group
         Type: String
-      #TableName: TelegramTasweerBot 
 
 Outputs:
   TelegramApi:
