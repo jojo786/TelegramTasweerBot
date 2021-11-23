@@ -1,3 +1,5 @@
+[![Pipeline](https://github.com/jojo786/TelegramTasweerBot/actions/workflows/pipeline.yaml/badge.svg)](https://github.com/jojo786/TelegramTasweerBot/actions/workflows/pipeline.yaml)
+
 # TelegramTasweerBot
 Telegram Bot that detects and deletes representations of animate objects. It could be used to remove personally identifiable information (PII) from telegram.
 Its written in python 3, using the [python-telegram-bot](https://pypi.org/project/python-telegram-bot/) telegram bot framework. It runs on AWS Lambda, or as a standalone python program.

@@ -11,7 +11,7 @@ from aws_lambda_powertools.utilities import parameters
 ssm_provider = parameters.SSMProvider()
 
 stage = os.environ['stage']
-TelegramBotToken = ssm_provider.get("/telegramtasweerbot/telegram/"+stage+"/bottoken", decrypt=True)
+TelegramBotToken = ssm_provider.get("/telegramtasweerbot/telegram/"+stage+"/bot_token", decrypt=True)
 
 bot = Bot(token=TelegramBotToken)
 dispatcher = Dispatcher(bot, None, use_context=True)
