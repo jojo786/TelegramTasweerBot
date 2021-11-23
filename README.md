@@ -7,6 +7,7 @@ Its written in python 3, using the [python-telegram-bot](https://pypi.org/projec
 Read my [blog post](https://hacksaw.co.za/blog/running-a-telegram-bot-on-aws-lambda/).
 
 # Architecture
+Requests come in via API Gateway, which get routed to Lambda. Lambda gets the Telegram Token from SSM Parameter Store. Counts of activity are written to DynamoDB, and logs are stored on CloudWatch. The CI/CD pipeline will provision both a dev and prod environment.
 ![architecture](docs/TelegramTasweerBot-Architecture.png)
 
 # Islamic ruling regarding photography
@@ -52,9 +53,12 @@ This bot only has handlers for video and images, and a limited regex for emoji, 
 - Decide between running it on AWS Lambda, or as a standalone python script
 
 ## AWS Serverless
+Once you have forked this repo, GitHub Actions CI/CD pipeline will run on a `git push`. But if you want to build and deploy from SAM, then follow this:
+
 - Install [AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/install-cliv2.html), and  [configure it](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-quickstart.html#cli-configure-quickstart-config)
 - Install [AWS SAM CLI](https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/serverless-sam-cli-install.html)
-- Run `sam build && sam deploy --parameter-overrides TelegramBotToken=12334342:ABCD124324234` where `12334342:ABCD124324234` is the token from BotFather
+- Create an SSM Parameter to store the Telegram token. `aws ssm put-parameter --region eu-west-1 --name "/telegramtasweerbot/telegram/dev/bot_token" --type "SecureString" --value "12334342:ABCD12432423" --overwrite`
+- Run `sam build && sam deploy --parameter-overrides --parameter-overrides StageEnv=dev` to run it for dev. Similiar for prod.
 - Note the Outputs from the above `sam deploy` command, which will include the Value of the TelegramApi, which is the AWS Gateway endpoint, e.g. `https://1fgfgfd56.execute-api.eu-west-1.amazonaws.com/Prod` 
 - Update your Telegram bot to change from polling to [Webhook](https://core.telegram.org/bots/api#setwebhook), by pasting this URL in your browser, or curl'ing it: `https://api.telegram.org/bot12334342:ABCD124324234/setWebHook?url=https://1fgfgfd56.execute-api.eu-west-1.amazonaws.com/Prod/`. Use your bot token and API GW endpoint. You can check that it was set correctly by going to `https://api.telegram.org/bot12334342:ABCD124324234/getWebhookInfo`, which should include the `url` of your AWS API GW, as well as any errors Telegram is encounterting calling your bot on that API.
 
