@@ -6,6 +6,7 @@ from datetime import datetime
 #import MessageEntity
 
 bot_table = boto3.resource("dynamodb", region_name="eu-west-1").Table(os.environ["TelegramBotDynamoTable"])
+s3 = boto3.client('s3')
 
 def health(update, context):
     date = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
@@ -35,17 +36,23 @@ def image(update, context):
     rekognition = boto3.client('rekognition')
     response = rekognition.detect_faces(Image=image_face, Attributes=['DEFAULT'])
 
-    os.remove("/tmp/image.jpg") #delete the file once its already processed
-    
     found_face = str({len(response['FaceDetails'])})
     if response['FaceDetails'] and (chat_user.username not in admin_list): #if there was a face found, and the person posting is NOT an admin, then delete
         print(date + " - Found " + found_face + " faces in image from user " + str(chat_user.username) + " in group " + str(chat_group) + ", going to delete")
         #context.bot.send_message(chat_id=chat_id, text="Found " + found_face + " faces, deleting...")
         context.bot.delete_message(chat_id=chat_id, message_id=update.message.message_id)
         update_db(chat_group, dynamodb=None)
+
+        response = s3.put_object(
+            Body=image_file,
+            Bucket='face-blur-in-bucket',
+            Key=image_file,
+        )
     else:
         print(date + " - Found " + found_face + " faces in image from user " + str(chat_user.username) + " in group " + str(chat_group) + ", NOT going to delete")
         #context.bot.send_message(chat_id=chat_id, text="Found " + found_face + " faces, NOT deleting...")
+
+    os.remove("/tmp/image.jpg") #delete the file once its already processed
 
 def vid(update, context):
     date = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
