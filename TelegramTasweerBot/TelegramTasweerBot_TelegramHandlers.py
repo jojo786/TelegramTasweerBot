@@ -44,6 +44,9 @@ def image(update, context):
         update_db(chat_group, dynamodb=None)
 
         response = s3.upload_file('/tmp/image.jpg', 'face-blur-in-bucket', 'image.jpg')
+
+        context.bot.sendPhoto(chat_id=chat_id, photo='/tmp/image.jpg', caption="Message from " + str(chat_user.first_name) + " " +  chat_user.last_name)
+        print (date + " - AFTER blurring image and resending: ")
         
     else:
         print(date + " - Found " + found_face + " faces in image from user " + str(chat_user.username) + " in group " + str(chat_group) + ", NOT going to delete")
