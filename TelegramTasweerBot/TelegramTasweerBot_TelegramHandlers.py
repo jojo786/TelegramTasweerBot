@@ -37,7 +37,7 @@ def image(update, context):
     response = rekognition.detect_faces(Image=image_face, Attributes=['DEFAULT'])
 
     found_face = str({len(response['FaceDetails'])})
-    if response['FaceDetails'] #and (chat_user.username not in admin_list): #if there was a face found, and the person posting is NOT an admin, then delete
+    if response['FaceDetails']: #and (chat_user.username not in admin_list): #if there was a face found, and the person posting is NOT an admin, then delete
         print(date + " - Found " + found_face + " faces in image from user " + str(chat_user.username) + " in group " + str(chat_group) + ", going to delete")
         #context.bot.send_message(chat_id=chat_id, text="Found " + found_face + " faces, deleting...")
         context.bot.delete_message(chat_id=chat_id, message_id=update.message.message_id)
