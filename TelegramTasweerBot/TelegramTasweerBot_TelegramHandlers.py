@@ -43,11 +43,8 @@ def image(update, context):
         context.bot.delete_message(chat_id=chat_id, message_id=update.message.message_id)
         update_db(chat_group, dynamodb=None)
 
-        response = s3.put_object(
-            Body=image_file,
-            Bucket='face-blur-in-bucket',
-            Key=image_file,
-        )
+        response = s3.upload_file(image_file, 'face-blur-in-bucket', 'image')
+        
     else:
         print(date + " - Found " + found_face + " faces in image from user " + str(chat_user.username) + " in group " + str(chat_group) + ", NOT going to delete")
         #context.bot.send_message(chat_id=chat_id, text="Found " + found_face + " faces, NOT deleting...")
