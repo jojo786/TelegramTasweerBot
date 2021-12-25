@@ -39,8 +39,7 @@ Resources:
             TableName: !Ref TelegramTasweerBotTable
         - RekognitionDetectOnlyPolicy: {}
         - Statement:
-          -
-            Effect: "Allow"
+          - Effect: "Allow"
             Action:
               - ssm:GetParameters
               - ssm:GetParameter
@@ -48,6 +47,9 @@ Resources:
             Resource:
               - '*'
               - 'arn:aws:ssm:::parameter/telegramtasweerbot/*'
+          - Effect: Allow
+            Action: s3:*
+            Resource: "arn:aws:s3:::face-blur-in-bucket/*"
       Architectures:
         - x86_64
       Events:
