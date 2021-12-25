@@ -45,7 +45,7 @@ def image(update, context):
 
         response = s3.upload_file('/tmp/image.jpg', 'face-blur-in-bucket', 'image.jpg')
 
-        context.bot.sendPhoto(chat_id=chat_id, photo='/tmp/image.jpg', caption="Message from " + str(chat_user.first_name) + " " +  chat_user.last_name)
+        context.bot.sendPhoto(chat_id=chat_id, photo=image_face, caption="Message from " + str(chat_user.first_name) + " " +  chat_user.last_name)
         print (date + " - AFTER blurring image and resending: ")
         
     else:
