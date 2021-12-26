@@ -5,7 +5,7 @@ Description: >
 
 Globals:
   Function:
-    Timeout: 6
+    Timeout: 9
 
 Parameters:
     StageEnv:
