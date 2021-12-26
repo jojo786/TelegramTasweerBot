@@ -15,7 +15,7 @@ def health(update, context):
     update.message.reply_text('Was-salaam')
 
 def image(update, context):
-    admin_list = ['jojo786', 'Muaaza'] #List of telegram users that can bypass the rules and still post
+    admin_list = ['jojo786', 'Muaaza', 'LambdaYusufBot'] #List of telegram users that can bypass the rules and still post
     date = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
     print(date + " - Start processing image:")
 
@@ -38,16 +38,19 @@ def image(update, context):
     response = rekognition.detect_faces(Image=image_face, Attributes=['DEFAULT'])
 
     found_face = str({len(response['FaceDetails'])})
-    if response['FaceDetails']: #and (chat_user.username not in admin_list): #if there was a face found, and the person posting is NOT an admin, then delete
+    if response['FaceDetails'] and (chat_user.username not in admin_list): #if there was a face found, and the person posting is NOT an admin, then delete
         print(date + " - Found " + found_face + " faces in image from user " + str(chat_user.username) + " in group " + str(chat_group) + ", going to delete")
         #context.bot.send_message(chat_id=chat_id, text="Found " + found_face + " faces, deleting...")
         context.bot.delete_message(chat_id=chat_id, message_id=update.message.message_id)
         update_db(chat_group, dynamodb=None)
         # invoke the blurrinh service by uploading the image to S3 - in bucket
+        print (date + " - blurring image ")
         response = s3.upload_file('/tmp/image.jpg', 'face-blur-in-bucket', 'image.jpg')
         # bad idea....sleep/wait for blurring service to upload to S3 - out bucket
         time.sleep(3)
+        print (date + " - Downloading blurred image ")
         s3.download_file('face-blur-out-bucket', 'image.jpg', '/tmp/image-blur.jpg')
+        print (date + " - reposting blurred image ")
         context.bot.sendPhoto(chat_id=chat_id, photo=open("/tmp/image-blur.jpg", 'rb'), caption="Message from " + str(chat_user.first_name) + " " +  chat_user.last_name)
         print (date + " - AFTER blurring image and resending: ")
         
