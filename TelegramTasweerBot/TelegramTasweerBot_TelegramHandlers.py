@@ -3,6 +3,7 @@ import boto3
 import os
 import emoji
 from datetime import datetime
+import time
 #import MessageEntity
 
 bot_table = boto3.resource("dynamodb", region_name="eu-west-1").Table(os.environ["TelegramBotDynamoTable"])
@@ -42,10 +43,12 @@ def image(update, context):
         #context.bot.send_message(chat_id=chat_id, text="Found " + found_face + " faces, deleting...")
         context.bot.delete_message(chat_id=chat_id, message_id=update.message.message_id)
         update_db(chat_group, dynamodb=None)
-
+        # invoke the blurrinh service by uploading the image to S3 - in bucket
         response = s3.upload_file('/tmp/image.jpg', 'face-blur-in-bucket', 'image.jpg')
-
-        context.bot.sendPhoto(chat_id=chat_id, photo=open("/tmp/image.jpg", 'rb'), caption="Message from " + str(chat_user.first_name) + " " +  chat_user.last_name)
+        # bad idea....sleep/wait for blurring service to upload to S3 - out bucket
+        time.sleep(3)
+        s3.download_file('face-blur-out-bucket', 'image.jpg', '/tmp/image-blur.jpg')
+        context.bot.sendPhoto(chat_id=chat_id, photo=open("/tmp/image-blur.jpg", 'rb'), caption="Message from " + str(chat_user.first_name) + " " +  chat_user.last_name)
         print (date + " - AFTER blurring image and resending: ")
         
     else:
