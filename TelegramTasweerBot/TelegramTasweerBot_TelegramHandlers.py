@@ -15,7 +15,7 @@ def health(update, context):
     update.message.reply_text('Was-salaam')
 
 def image(update, context):
-    admin_list = ['jojo786', 'Muaaza', 'LambdaYusufBot'] #List of telegram users that can bypass the rules and still post
+    admin_list = ['Muaaza', 'LambdaYusufBot'] #List of telegram users that can bypass the rules and still post
     date = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
     print(date + " - Start processing image:")
 
