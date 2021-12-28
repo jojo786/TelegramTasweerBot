@@ -6,6 +6,8 @@ from datetime import datetime
 import time
 #import MessageEntity
 
+stage = os.environ['stage']
+
 bot_table = boto3.resource("dynamodb", region_name="eu-west-1").Table(os.environ["TelegramBotDynamoTable"])
 s3 = boto3.client('s3')
 
@@ -43,14 +45,7 @@ def image(update, context):
         update_db(chat_group, dynamodb=None)
         # invoke the blurring service by uploading the image to S3 - in bucket
         print ("send to image blurring bucket")
-        response = s3.upload_file('/tmp/image.jpg', 'telegramtasweerbot-faceblur-in', 'image'+str(chat_id)+'-'+str(chat_user.first_name)+'-'+str(chat_user.last_name)+'.jpg')
-        # bad idea....sleep/wait for blurring service to upload to S3 - out bucket
-        #time.sleep(3)
-        #print ("Downloading blurred image ")
-        #s3.download_file('telegramtasweerbot-faceblur-out', 'image.jpg', '/tmp/image-blur.jpg')
-        #print ("reposting blurred image ")
-        #context.bot.sendPhoto(chat_id=chat_id, photo=open("/tmp/image-blur.jpg", 'rb'), caption="Message from " + str(chat_user.first_name) + " " +  chat_user.last_name)
-        #print ("AFTER blurring image and resending: ")
+        response = s3.upload_file('/tmp/image.jpg', 'telegramtasweerbot-'+stage+'-faceblur-in', 'image'+str(chat_id)+'-'+str(chat_user.first_name)+'-'+str(chat_user.last_name)+'.jpg')
         
     else:
         print("Found " + found_face + " faces in image from user " + str(chat_user.username) + " in group " + str(chat_group) + ", NOT going to delete")
