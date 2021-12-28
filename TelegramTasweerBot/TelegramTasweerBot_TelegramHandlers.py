@@ -43,11 +43,11 @@ def image(update, context):
         update_db(chat_group, dynamodb=None)
         # invoke the blurring service by uploading the image to S3 - in bucket
         print ("blurring image ")
-        response = s3.upload_file('/tmp/image.jpg', 'face-blur-in-bucket', 'image.jpg')
+        response = s3.upload_file('/tmp/image.jpg', 'telegramtasweerbot-faceblur-in', 'image.jpg')
         # bad idea....sleep/wait for blurring service to upload to S3 - out bucket
         time.sleep(3)
         print ("Downloading blurred image ")
-        s3.download_file('face-blur-out-bucket', 'image.jpg', '/tmp/image-blur.jpg')
+        s3.download_file('ftelegramtasweerbot-faceblur-out', 'image.jpg', '/tmp/image-blur.jpg')
         print ("reposting blurred image ")
         context.bot.sendPhoto(chat_id=chat_id, photo=open("/tmp/image-blur.jpg", 'rb'), caption="Message from " + str(chat_user.first_name) + " " +  chat_user.last_name)
         print ("AFTER blurring image and resending: ")

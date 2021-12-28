@@ -50,8 +50,8 @@ Resources:
           - Effect: Allow
             Action: s3:*
             Resource: 
-              - "arn:aws:s3:::face-blur-in-bucket/*"
-              - "arn:aws:s3:::face-blur-out-bucket/*"
+              - "arn:aws:s3:::telegramtasweerbot-faceblur-in/*"
+              - "arn:aws:s3:::telegramtasweerbot-faceblur-out/*"
       Architectures:
         - x86_64
       Events:
