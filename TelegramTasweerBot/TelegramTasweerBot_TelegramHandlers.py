@@ -14,7 +14,7 @@ def health(update, context):
     update.message.reply_text('Was-salaam')
 
 def image(update, context):
-    admin_list = ['jojo786', 'Muaaza', 'LambdaYusufBot'] #List of telegram users that can bypass the rules and still post
+    admin_list = ['Muaaza', 'LambdaYusufBot'] #List of telegram users that can bypass the rules and still post
     print("Start processing image:")
 
     chat_id = update.message.chat_id
