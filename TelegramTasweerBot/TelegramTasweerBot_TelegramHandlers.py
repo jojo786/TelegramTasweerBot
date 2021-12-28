@@ -47,7 +47,7 @@ def image(update, context):
         # bad idea....sleep/wait for blurring service to upload to S3 - out bucket
         time.sleep(3)
         print ("Downloading blurred image ")
-        s3.download_file('ftelegramtasweerbot-faceblur-out', 'image.jpg', '/tmp/image-blur.jpg')
+        s3.download_file('telegramtasweerbot-faceblur-out', 'image.jpg', '/tmp/image-blur.jpg')
         print ("reposting blurred image ")
         context.bot.sendPhoto(chat_id=chat_id, photo=open("/tmp/image-blur.jpg", 'rb'), caption="Message from " + str(chat_user.first_name) + " " +  chat_user.last_name)
         print ("AFTER blurring image and resending: ")
