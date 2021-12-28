@@ -50,10 +50,10 @@ Resources:
           - Effect: Allow
             Action: s3:*
             Resource: 
-              - "arn:aws:s3:::telegramtasweerbot-faceblur-dev-in/*"
-              - "arn:aws:s3:::telegramtasweerbot-faceblur-dev-out/*"
-              - "arn:aws:s3:::telegramtasweerbot-faceblur-prod-in/*"
-              - "arn:aws:s3:::telegramtasweerbot-faceblur-prod-out/*"
+              - "arn:aws:s3:::telegramtasweerbot-dev-faceblur-in/*"
+              - "arn:aws:s3:::telegramtasweerbot-dev-faceblur-out/*"
+              - "arn:aws:s3:::telegramtasweerbot-prod-faceblur-in/*"
+              - "arn:aws:s3:::telegramtasweerbot-prod-faceblur-out/*"
       Architectures:
         - x86_64
       Events:
