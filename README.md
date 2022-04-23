@@ -34,10 +34,10 @@ The following list contains information from reliable and authentic Ulema regard
 
 It detects these types of objects in a telegram channel/group:
 ## Images
-It uses AWS Rekognition to detect faces in an image, and then deletes.
+It uses AWS Rekognition to detect faces in an image, and then deletes it. This bot now uses https://aws.amazon.com/blogs/compute/creating-a-serverless-face-blurring-service-for-photos-in-amazon-s3/ to obscure/blur the faces in the images, and posts the modified image back to Telegram
 
 ## Videos
-Once the filter picks up a video, it deletes it
+Once the filter picks up a video, it deletes it.
 
 ## Emojis
 Emojis are part of telegram text messages, but we did'nt want the bot to access all messages, so we used a Telegram Message Handler with a regex to catch only blacklisted emojis. This ensures that that the bot does not access most messages, and lowers the amount of times Telegram will invoke the bot (which will also keep the cost of running the bot low). The bot uses a blacklist/blocklist of emojis that are to be removed. Only messages with those emojis will be sent to the bot, which will replace the emoji image with its text short code, which is sometimes called [CLDR](http://cldr.unicode.org/translation/characters-emoji-symbols/short-names-and-keywords). E.g. a smiling face emoji will be replaced by `:grinning_face_with_big_eyes:`. It does it as follows: a handler with a blocklist is used to catch haraam emojis, deletes the message, then the [python emoji library](https://github.com/carpedm20/emoji) is used, by calling the `demojize` method on the message, which replaces emojis in the text message with their text representation, and the bot then reposts the modified message back. However, this can be seen as intrusive, as the now modified message appears as sent from the bot, and not original person that sent the message. So therefore you want to minimise the blocklist to ONLY include haraam emojis.
@@ -68,9 +68,9 @@ Once you have forked this repo, GitHub Actions CI/CD pipeline will run on a `git
 
 
 # TODO: 
+- Replace API GW with Lambau URLs
 - Dont save image to file: https://stackoverflow.com/questions/59876271/how-to-process-images-from-telegram-bot-without-saving-to-file
 - Detect cartoon images
-- Instead of deleting, remove/obscurre faces in images: https://aws.amazon.com/blogs/compute/creating-a-serverless-face-blurring-service-for-photos-in-amazon-s3/ 
 - Filter and detect a list of URLs, e.g youtube.com
 - Analyse inline images that accompany URLs/links
 
