@@ -7,7 +7,7 @@ Its written in python 3, using the [python-telegram-bot](https://pypi.org/projec
 Read my [blog post](https://hacksaw.co.za/blog/running-a-telegram-bot-on-aws-lambda/).
 
 # Architecture
-Requests come in via API Gateway, which get routed to Lambda. Lambda gets the Telegram Token from SSM Parameter Store. Counts of activity are written to DynamoDB, and logs are stored on CloudWatch. The CI/CD pipeline will provision both a dev and prod environment.
+Requests come in via the Lambda URL endpoint, which get routed to a Lambda function. The Lambda function gets the Telegram Token from SSM Parameter Store. Logs are stored on CloudWatch. The CI/CD pipeline will provision both a dev and prod environment.
 ![architecture](docs/TelegramTasweerBot-Architecture.png)
 
 # Islamic ruling regarding photography
@@ -59,8 +59,8 @@ Once you have forked this repo, GitHub Actions CI/CD pipeline will run on a `git
 - Install [AWS SAM CLI](https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/serverless-sam-cli-install.html)
 - Create an SSM Parameter to store the Telegram token. `aws ssm put-parameter --region eu-west-1 --name "/telegramtasweerbot/telegram/dev/bot_token" --type "SecureString" --value "12334342:ABCD12432423" --overwrite`
 - Run `sam build && sam deploy --parameter-overrides --parameter-overrides StageEnv=dev` to run it for dev. Similiar for prod.
-- Note the Outputs from the above `sam deploy` command, which will include the Value of the TelegramApi, which is the AWS Gateway endpoint, e.g. `https://1fgfgfd56.execute-api.eu-west-1.amazonaws.com/Prod` 
-- Update your Telegram bot to change from polling to [Webhook](https://core.telegram.org/bots/api#setwebhook), by pasting this URL in your browser, or curl'ing it: `https://api.telegram.org/bot12334342:ABCD124324234/setWebHook?url=https://1fgfgfd56.execute-api.eu-west-1.amazonaws.com/Prod/`. Use your bot token and API GW endpoint. You can check that it was set correctly by going to `https://api.telegram.org/bot12334342:ABCD124324234/getWebhookInfo`, which should include the `url` of your AWS API GW, as well as any errors Telegram is encounterting calling your bot on that API.
+- Note the Outputs from the above `sam deploy` command, which will include the Value of the TelegramApi, which is the Lambda URL endpoint, e.g. `https://1fgfgfd56.lambda-url.eu-west-1.on.aws/` 
+- Update your Telegram bot to change from polling to [Webhook](https://core.telegram.org/bots/api#setwebhook), by pasting this URL in your browser, or curl'ing it: `https://api.telegram.org/bot12334342:ABCD124324234/setWebHook?url=https://1fgfgfd56.lambda-url.eu-west-1.on.aws/`. Use your bot token and Lambda URL endpoint. You can check that it was set correctly by going to `https://api.telegram.org/bot12334342:ABCD124324234/getWebhookInfo`, which should include the `url` of your Lambda URL, as well as any errors Telegram is encounterting calling your bot on that API.
 
 ## Standalone python script
 - It picks up your telegram bot token from environment variables. E.g. running `export TELEGRAM_BOT=12334342:ABCD124324234` on Linux/macos should be sufficient. AWS credentials also picked up from environment variables.
@@ -68,7 +68,6 @@ Once you have forked this repo, GitHub Actions CI/CD pipeline will run on a `git
 
 
 # TODO: 
-- Replace API GW with Lambau URLs
 - Dont save image to file: https://stackoverflow.com/questions/59876271/how-to-process-images-from-telegram-bot-without-saving-to-file
 - Detect cartoon images
 - Filter and detect a list of URLs, e.g youtube.com
