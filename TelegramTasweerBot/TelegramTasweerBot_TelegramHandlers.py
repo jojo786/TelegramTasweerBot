@@ -8,7 +8,6 @@ import time
 
 stage = os.environ['stage']
 
-bot_table = boto3.resource("dynamodb", region_name="eu-west-1").Table(os.environ["TelegramBotDynamoTable"])
 s3 = boto3.client('s3')
 
 def health(update, context):
@@ -42,7 +41,6 @@ def image(update, context):
         print("Found " + found_face + " faces in image from user " + str(chat_user.username) + " in group " + str(chat_group) + ", going to delete")
         #context.bot.send_message(chat_id=chat_id, text="Found " + found_face + " faces, deleting...")
         context.bot.delete_message(chat_id=chat_id, message_id=update.message.message_id)
-        update_db(chat_group, dynamodb=None)
         # invoke the blurring service by uploading the image to S3 - in bucket
         print ("send to image blurring bucket")
         response = s3.upload_file('/tmp/image.jpg', 'telegramtasweerbot-'+stage+'-faceblur-in', 'image'+str(chat_id)+'-'+str(chat_user.first_name)+'-'+str(chat_user.last_name)+'.jpg')
@@ -59,36 +57,11 @@ def vid(update, context):
 
     print("Found video from user " + str(chat_user.username) + " in group " + str(chat_group) + ", going to delete")
     context.bot.delete_message(chat_id=chat_id, message_id=update.message.message_id)
-    update_db(chat_group, dynamodb=None)
 
 def health(update, context):
     print("Start health command")
     update.message.reply_text('Was-salaam')
 
-def update_db(group, dynamodb=None):
-    if not dynamodb:
-        dynamodb = boto3.resource('dynamodb', 'eu-west-1')
-
-    table = bot_table
-
-    try:
-        response = table.update_item(
-        Key={
-            'group': group
-        },
-        UpdateExpression="set blocked = blocked + :val",
-        ExpressionAttributeValues={
-            ':val': 1
-        },
-        ReturnValues="UPDATED_NEW"
-        )
-    except:
-        response = table.put_item(
-        Item={
-            'group': group,
-            'blocked': 1
-       }
-    )
 
 def emoji_handler(update, context):
     print("Start processing emoji")
@@ -109,8 +82,6 @@ def emoji_handler(update, context):
             last_name = ""
         context.bot.send_message(chat_id=chat_id, text= "Message from " + str(chat_user.first_name) + " " +  last_name + ": \n " + chat_text_noemoji)
         print ("AFTER removing emoji: " + chat_text_noemoji)
-
-    update_db(chat_group, dynamodb=None)
 
 def url_handler(update, context):
     print("Start processing URL links")

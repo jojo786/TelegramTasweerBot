@@ -31,12 +31,9 @@ Resources:
       Environment:
         Variables:
           stage: !FindInMap [StageMappings, !Ref StageEnv, stage]
-          TelegramBotDynamoTable: !Ref TelegramTasweerBotTable
       MemorySize: 1024
       ReservedConcurrentExecutions: 10
       Policies:
-        - DynamoDBWritePolicy:
-            TableName: !Ref TelegramTasweerBotTable
         - RekognitionDetectOnlyPolicy: {}
         - Statement:
           - Effect: "Allow"
@@ -62,12 +59,6 @@ Resources:
           Properties:
             Path: /
             Method: any
-  TelegramTasweerBotTable:
-    Type: AWS::Serverless::SimpleTable
-    Properties:
-      PrimaryKey:
-        Name: group
-        Type: String
 
 Outputs:
   TelegramApi:
