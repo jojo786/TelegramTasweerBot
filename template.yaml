@@ -53,11 +53,14 @@ Resources:
               - "arn:aws:s3:::telegramtasweerbot-prod-faceblur-out/*"
       Architectures:
         - x86_64
-      FunctionUrlConfig:
-        AuthType: NONE
+      Events:
+        TelegramWebHook:
+          Type: Api 
+          Properties:
+            Path: /
+            Method: POST
 
 Outputs:
   TelegramApi:
-    Description: "Lambda URL for TelegramTasweerBot function"
-    Value:
-      Fn::GetAtt: TelegramTasweerBotFunctionUrl.FunctionUrl
+    Description: "API Gateway endpoint URL for Prod stage for TelegramTasweerBot function"
+    Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/"
