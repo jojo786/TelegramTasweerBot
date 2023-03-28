@@ -31,15 +31,6 @@ env:
   # prod "sam package" and "sam deploy" commands.
   # PROD_IMAGE_REPOSITORY = '0123456789.dkr.ecr.region.amazonaws.com/repository-name'
   PROD_REGION: eu-west-1
-  - name: configure aws credentials
-  uses: aws-actions/configure-aws-credentials@v1
-  with:
-    role-to-assume: arn:aws:iam::1234567890:role/your-role-arn
-    role-duration-seconds: 900 # the ttl of the session, in seconds.
-    aws-region: us-east-1 # use your region here.
-# You can now execute commands that use the credentials👇
-- name: Serverless deploy
-  run: sls deploy --stage dev
 
 
 jobs:
