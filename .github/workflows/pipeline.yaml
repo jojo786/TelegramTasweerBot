@@ -31,6 +31,16 @@ env:
   # prod "sam package" and "sam deploy" commands.
   # PROD_IMAGE_REPOSITORY = '0123456789.dkr.ecr.region.amazonaws.com/repository-name'
   PROD_REGION: eu-west-1
+  - name: configure aws credentials
+  uses: aws-actions/configure-aws-credentials@v1
+  with:
+    role-to-assume: arn:aws:iam::1234567890:role/your-role-arn
+    role-duration-seconds: 900 # the ttl of the session, in seconds.
+    aws-region: us-east-1 # use your region here.
+# You can now execute commands that use the credentials👇
+- name: Serverless deploy
+  run: sls deploy --stage dev
+
 
 jobs:
   test:
@@ -114,16 +124,12 @@ jobs:
       - name: Build resources
         run: sam build --template ${SAM_TEMPLATE} --use-container
 
-      - name: Assume the testing pipeline user role
+      - name: configure aws credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
-          aws-access-key-id: ${{ env.PIPELINE_USER_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ env.PIPELINE_USER_SECRET_ACCESS_KEY }}
-          aws-region: ${{ env.TESTING_REGION }}
-          role-to-assume: ${{ env.TESTING_PIPELINE_EXECUTION_ROLE }}
-          role-session-name: testing-packaging
-          role-duration-seconds: 3600
-          role-skip-session-tagging: true
+          role-to-assume: arn:aws:iam::718974227478:role/GithubActionsOIDC-Role-FI89LLXFL7RA
+          role-duration-seconds: 900 # the ttl of the session, in seconds.
+          aws-region: eu-west-1 # use your region here.
 
       - name: Upload artifacts to testing artifact buckets
         run: |
@@ -173,16 +179,12 @@ jobs:
         with:
           name: packaged-testing.yaml
 
-      - name: Assume the testing pipeline user role
+      - name: configure aws credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
-          aws-access-key-id: ${{ env.PIPELINE_USER_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ env.PIPELINE_USER_SECRET_ACCESS_KEY }}
-          aws-region: ${{ env.TESTING_REGION }}
-          role-to-assume: ${{ env.TESTING_PIPELINE_EXECUTION_ROLE }}
-          role-session-name: testing-deployment
-          role-duration-seconds: 3600
-          role-skip-session-tagging: true
+          role-to-assume: arn:aws:iam::718974227478:role/GithubActionsOIDC-Role-FI89LLXFL7RA
+          role-duration-seconds: 900 # the ttl of the session, in seconds.
+          aws-region: eu-west-1 # use your region here.
 
       - name: Deploy to testing account
         run: |
@@ -220,16 +222,12 @@ jobs:
         with:
           name: packaged-prod.yaml
 
-      - name: Assume the prod pipeline user role
+      - name: configure aws credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
-          aws-access-key-id: ${{ env.PIPELINE_USER_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ env.PIPELINE_USER_SECRET_ACCESS_KEY }}
-          aws-region: ${{ env.PROD_REGION }}
-          role-to-assume: ${{ env.PROD_PIPELINE_EXECUTION_ROLE }}
-          role-session-name: prod-deployment
-          role-duration-seconds: 3600
-          role-skip-session-tagging: true
+          role-to-assume: arn:aws:iam::718974227478:role/GithubActionsOIDC-Role-FI89LLXFL7RA
+          role-duration-seconds: 900 # the ttl of the session, in seconds.
+          aws-region: eu-west-1 # use your region here.
 
       - name: Deploy to production account
         run: |
