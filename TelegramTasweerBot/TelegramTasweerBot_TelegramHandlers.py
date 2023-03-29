@@ -1,10 +1,8 @@
-from telegram.ext import Dispatcher, Updater, InlineQueryHandler, CommandHandler, MessageHandler, Filters
 import boto3
 import os
 import emoji
 from datetime import datetime
 import time
-#import MessageEntity
 
 stage = os.environ['stage']
 
