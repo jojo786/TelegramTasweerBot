@@ -3,29 +3,30 @@ import os
 import emoji
 from datetime import datetime
 import time
+from telegram import Update
+from telegram.ext import ContextTypes
 
 stage = os.environ['stage']
 
 s3 = boto3.client('s3')
 
-def health(update, context):
-    print("Start health command")
-    update.message.reply_text('Was-salaam')
+async def health(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    await context.bot.send_message(chat_id=update.effective_chat.id, text="Was-salaam")
 
-def image(update, context):
+async def image(update: Update, context: ContextTypes.DEFAULT_TYPE):
     admin_list = ['Muaaza', 'LambdaYusufBot'] #List of telegram users that can bypass the rules and still post
     print("Start processing image:")
 
-    chat_id = update.message.chat_id
-    chat_user = update.message.from_user
-    chat_group = update.message.chat.title
+    chat_id = update.effective_chat.id
+    chat_user = update.effective_message.from_user
+    chat_group = update.effective_message.chat.title
     #context.bot.send_message(chat_id=chat_id, text="Detected image")
 
-    if (update.message.photo): # a photo, not a document
-        file = context.bot.getFile(update.message.photo[-1].file_id)
+    if (update.effective_message.photo): # a photo, not a document
+        file = context.bot.getFile(update.effective_message.photo[-1].file_id)
     
     if (update.message.document): # a document, not a photo
-        file = context.bot.getFile(update.message.document.file_id)
+        file = context.bot.getFile(update.effective_message.document.file_id)
     
     file.download(f'/tmp/image.jpg')
     with open("/tmp/image.jpg", 'rb') as image_file:
