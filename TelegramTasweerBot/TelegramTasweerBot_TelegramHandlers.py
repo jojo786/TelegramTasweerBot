@@ -20,10 +20,10 @@ async def image(update: Update, context: ContextTypes.DEFAULT_TYPE):
     #context.bot.send_message(chat_id=chat_id, text="Detected image")
 
     if (update.effective_message.photo): # a photo, not a document
-        file = context.bot.getFile(update.effective_message.photo[-1].file_id)
+        file = await context.bot.getFile(update.effective_message.photo[-1].file_id)
     
     if (update.message.document): # a document, not a photo
-        file = context.bot.getFile(update.effective_message.document.file_id)
+        file = await context.bot.getFile(update.effective_message.document.file_id)
     
     file.download(f'/tmp/image.jpg')
     with open("/tmp/image.jpg", 'rb') as image_file:
