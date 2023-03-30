@@ -36,7 +36,7 @@ async def image(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if response['FaceDetails'] and (chat_user.username not in admin_list): #if there was a face found, and the person posting is NOT an admin, then delete
         print("Found " + found_face + " faces in image from user " + str(chat_user.username) + " in group " + str(chat_group) + ", going to delete")
         #context.bot.send_message(chat_id=chat_id, text="Found " + found_face + " faces, deleting...")
-        context.bot.delete_message(chat_id=chat_id, message_id=update.message.message_id)
+        await context.bot.delete_message(chat_id=chat_id, message_id=update.effective_message.message_id)
         # invoke the blurring service by uploading the image to S3 - in bucket
         print ("send to image blurring bucket")
         response = s3.upload_file('/tmp/image.jpg', 'telegramtasweerbot-'+stage+'-faceblur-in', 'image'+str(chat_id)+'-'+str(chat_user.first_name)+'-'+str(chat_user.last_name)+'.jpg')
@@ -45,14 +45,14 @@ async def image(update: Update, context: ContextTypes.DEFAULT_TYPE):
         print("Found " + found_face + " faces in image from user " + str(chat_user.username) + " in group " + str(chat_group) + ", NOT going to delete")
         #context.bot.send_message(chat_id=chat_id, text="Found " + found_face + " faces, NOT deleting...")
 
-def vid(update, context):
+async def vid(update: Update, context: ContextTypes.DEFAULT_TYPE):
     print("Start processing video")
-    chat_id = update.message.chat_id
-    chat_user = update.message.from_user
-    chat_group = update.message.chat.title
+    chat_id = update.effective_chat.id
+    chat_user = update.effective_message.from_user
+    chat_group = update.effective_message.chat.title
 
     print("Found video from user " + str(chat_user.username) + " in group " + str(chat_group) + ", going to delete")
-    context.bot.delete_message(chat_id=chat_id, message_id=update.message.message_id)
+    await context.bot.delete_message(chat_id=chat_id, message_id=update.effective_message.message_id)
 
 async def health(update: Update, context: ContextTypes.DEFAULT_TYPE):
     print("Start health command")
@@ -78,5 +78,5 @@ async def emoji_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
         await context.bot.send_message(chat_id=chat_id, text= "Message from " + str(chat_user.first_name) + " " +  last_name + ": \n " + chat_text_noemoji)
         print ("AFTER removing emoji: " + chat_text_noemoji)
 
-def url_handler(update, context):
+def url_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
     print("Start processing URL links")
