@@ -10,9 +10,6 @@ stage = os.environ['stage']
 
 s3 = boto3.client('s3')
 
-async def health(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    await context.bot.send_message(chat_id=update.effective_chat.id, text="Was-salaam")
-
 async def image(update: Update, context: ContextTypes.DEFAULT_TYPE):
     admin_list = ['Muaaza', 'LambdaYusufBot'] #List of telegram users that can bypass the rules and still post
     print("Start processing image:")
@@ -57,29 +54,28 @@ def vid(update, context):
     print("Found video from user " + str(chat_user.username) + " in group " + str(chat_group) + ", going to delete")
     context.bot.delete_message(chat_id=chat_id, message_id=update.message.message_id)
 
-def health(update, context):
+async def health(update: Update, context: ContextTypes.DEFAULT_TYPE):
     print("Start health command")
-    update.message.reply_text('Was-salaam')
+    await context.bot.send_message(chat_id=update.effective_chat.id, text="Was-salaam")
 
-
-def emoji_handler(update, context):
+async def emoji_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
     print("Start processing emoji")
 
-    chat_id = update.message.chat_id
-    chat_user = update.message.from_user
-    chat_group = update.message.chat.title
-    chat_text = update.message.text
+    chat_id = update.effective_message.chat_id
+    chat_user = update.effective_message.from_user
+    chat_group = update.effective_message.chat.title
+    chat_text = update.effective_message.text
     
     #print ("BEFORE: " + chat_text)
     print("Found emoji from user " + str(chat_user.username) + " in group " + str(chat_group) + ", going to delete")
-    context.bot.delete_message(chat_id=chat_id, message_id=update.message.message_id)
+    await context.bot.delete_message(chat_id=chat_id, message_id=update.effective_message.message_id)
 
     if (len(chat_text) > 1): #if len = 1, then this is only an emoji, so no need to repost it, as there is no message text
         chat_text_noemoji = emoji.demojize(chat_text)
         last_name = str(chat_user.last_name) 
         if (last_name == "None"): # some users dont have a Last Name set in Telegram, so it displays as None. In which case, instead of showing None, just blank it out
             last_name = ""
-        context.bot.send_message(chat_id=chat_id, text= "Message from " + str(chat_user.first_name) + " " +  last_name + ": \n " + chat_text_noemoji)
+        await context.bot.send_message(chat_id=chat_id, text= "Message from " + str(chat_user.first_name) + " " +  last_name + ": \n " + chat_text_noemoji)
         print ("AFTER removing emoji: " + chat_text_noemoji)
 
 def url_handler(update, context):
