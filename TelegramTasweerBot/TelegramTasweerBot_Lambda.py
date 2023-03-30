@@ -41,11 +41,11 @@ async def main(event, context):
     #\U0001F93E: Person surfing emoji.
     #\U0001F9D1-\U0001F9D3: Various person emojis, such as person in wheelchair, person with probing cane, and person with white cane.
 
-    application.add_handler(MessageHandler(filters.photo | filters.document.image | filters.document.jpg, image)) #to catch inline photos, and photos as attachements/files
-    application.add_handler(MessageHandler(filters.video | filters.document.mime_type("video/mp4"), vid)) #to catch inline vidoes, and videos as attachements/files
+    application.add_handler(MessageHandler(filters.PHOTO | filters.Document.IMAGE | filters.Document.JPG, image)) #to catch inline photos, and photos as attachements/files
+    application.add_handler(MessageHandler(filters.VIDEO | filters.Document.Mime_Type("video/mp4"), vid)) #to catch inline vidoes, and videos as attachements/files
     application.add_handler(CommandHandler("health", health))
-    application.add_handler(MessageHandler(filters.regex(emoji_blocklist), emoji_handler))
-    application.add_handler(MessageHandler(filters.entity("youtube.com"), url_handler)) #Not working
+    application.add_handler(MessageHandler(filters.Regex(emoji_blocklist), emoji_handler))
+    application.add_handler(MessageHandler(filters.Entity("youtube.com"), url_handler)) #Not working
 
     try:    
         await application.initialize()
