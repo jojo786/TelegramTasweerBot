@@ -25,7 +25,7 @@ async def image(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if (update.message.document): # a document, not a photo
         file = await context.bot.getFile(update.effective_message.document.file_id)
     
-    file.download(f'/tmp/image.jpg')
+    file.download_to_drive(f'/tmp/image.jpg')
     with open("/tmp/image.jpg", 'rb') as image_file:
             image_face = {'Bytes': image_file.read()}
     print("Saved image, now going to Rekognition:")
