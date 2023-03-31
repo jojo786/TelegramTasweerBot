@@ -21,13 +21,13 @@ def lambda_handler(event, context):
 
 async def main(event, context):
     emoji_blocklist = "([\U0001F600-\U0001F64B])" #F600-F64B: Emoticons and pictographs, including various facial expressions - https://unicode.org/charts/PDF/U1F600.pdf
-    #emoji_blocklist += "|([\U0001F910-\U0001F96B])" #F910-F96B: Additional emoticons and pictographs, including various facial expressions, hand gestures, and objects - https://unicode.org/charts/PDF/U1F900.pdf
-    #emoji_blocklist += "|([\U0001F980-\U0001F991])" #F980-F991: Animal emojies - https://unicode.org/charts/PDF/U1F900.pdf
-    #emoji_blocklist += "|[\U0001FAE0-\U0001FAE8])" #FAE0-FAE8: faces 
-    #emoji_blocklist += "|([\U0001F937])|([\U0001F483])|([\U0001F435])|([\U0001F412])"  #F937 is person shrugging, F483 is woman dancing, F435 and F412 are monkeys, 
-    #emoji_blocklist += "|([\U0001F466-\U0001F478])" # Various person emojis, such as man, woman, boy, girl, princess, baby                  
-    #emoji_blocklist += "|([\U0001F481-\U0001F483])" # Dancer emojis, including woman dancing, man dancing, and people with bunny ears.
-    #emoji_blocklist += "|([\U0001F486-\U0001F487])" # Various person emojis, such as woman getting haircut, man getting haircut, and person getting massage.
+    emoji_blocklist += "|([\U0001F910-\U0001F96B])" #F910-F96B: Additional emoticons and pictographs, including various facial expressions, hand gestures, and objects - https://unicode.org/charts/PDF/U1F900.pdf
+    emoji_blocklist += "|([\U0001F980-\U0001F991])" #F980-F991: Animal emojies - https://unicode.org/charts/PDF/U1F900.pdf
+    emoji_blocklist += "|[\U0001FAE0-\U0001FAE8])" #FAE0-FAE8: faces 
+    emoji_blocklist += "|([\U0001F937])|([\U0001F483])|([\U0001F435])|([\U0001F412])"  #F937 is person shrugging, F483 is woman dancing, F435 and F412 are monkeys, 
+    emoji_blocklist += "|([\U0001F466-\U0001F478])" # Various person emojis, such as man, woman, boy, girl, princess, baby                  
+    emoji_blocklist += "|([\U0001F481-\U0001F483])" # Dancer emojis, including woman dancing, man dancing, and people with bunny ears.
+    emoji_blocklist += "|([\U0001F486-\U0001F487])" # Various person emojis, such as woman getting haircut, man getting haircut, and person getting massage.
 
     #still to test
     #\U0001F645-\U0001F647: Various gesture emojis, such as person gesturing OK, person shrugging, and person tipping hand.
