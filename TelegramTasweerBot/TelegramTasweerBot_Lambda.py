@@ -27,7 +27,7 @@ async def main(event, context):
     emoji_blocklist += "|([\U0001F937])|([\U0001F483])|([\U0001F435])|([\U0001F412])"  #F937 is person shrugging, F483 is woman dancing, F435 and F412 are monkeys, 
     emoji_blocklist += "|([\U0001F466-\U0001F478])" # Various person emojis, such as man, woman, boy, girl, princess, baby                  
     emoji_blocklist += "|([\U0001F481-\U0001F483])" # Dancer emojis, including woman dancing, man dancing, and people with bunny ears.
-    emoji_blocklist += "|([\U0001F486-\U0001F487])" # Various person emojis, such as woman getting haircut, man getting haircut, and person getting massage.
+    emoji_blocklist += "|([\U0001F486-\U0001F487]))" # Various person emojis, such as woman getting haircut, man getting haircut, and person getting massage.
 
     #still to test
     #\U0001F645-\U0001F647: Various gesture emojis, such as person gesturing OK, person shrugging, and person tipping hand.
