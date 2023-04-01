@@ -6,8 +6,7 @@ import time
 from telegram import Update
 from telegram.ext import ContextTypes
 
-stage = 'dev'
-#stage = os.environ['stage']
+stage = os.environ['stage']
 
 s3 = boto3.client('s3')
 
