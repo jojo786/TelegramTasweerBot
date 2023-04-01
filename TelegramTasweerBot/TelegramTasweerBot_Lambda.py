@@ -20,7 +20,7 @@ def lambda_handler(event, context):
     return asyncio.get_event_loop().run_until_complete(main(event, context))
 
 async def main(event, context):
-    emoji_blocklist = "([\U0001F600-\U0001F64B])" #F600-F64B: Emoticons and pictographs, including various facial expressions - https://unicode.org/charts/PDF/U1F600.pdf
+    emoji_blocklist  = "([\U0001F600-\U0001F64B])" #F600-F64B: Emoticons and pictographs, including various facial expressions - https://unicode.org/charts/PDF/U1F600.pdf
     emoji_blocklist += "|([\U0001F910-\U0001F96B])" #F910-F96B: Additional emoticons and pictographs, including various facial expressions, hand gestures, and objects - https://unicode.org/charts/PDF/U1F900.pdf
     emoji_blocklist += "|([\U0001F980-\U0001F991])" #F980-F991: Animal emojies - https://unicode.org/charts/PDF/U1F900.pdf
     emoji_blocklist += "|([\U0001FAE0-\U0001FAE8])" #FAE0-FAE8: faces 
@@ -28,11 +28,11 @@ async def main(event, context):
     emoji_blocklist += "|([\U0001F481-\U0001F483])" #Dancer emojis, including woman dancing, man dancing, and people with bunny ears.
     emoji_blocklist += "|([\U0001F486-\U0001F487])" #Various person emojis, such as woman getting haircut, man getting haircut, and person getting massage.
     emoji_blocklist += "|([\U0001F645-\U0001F647])" #Various gesture emojis, such as person gesturing OK, person shrugging, and person tipping hand.
-    emoji_blocklist += "|([\U0001F937])|([\U0001F483])|([\U0001F435])|([\U0001F412])"  #F937 is person shrugging, F483 is woman dancing, F435 and F412 are monkeys. 
+    emoji_blocklist += "|([\U0001F648-\U0001F649])" #No-evil monkeys
+    emoji_blocklist += "|([\U0001F937])|([\U0001F483])|([\U0001F435])|([\U0001F412])|([\U0001F6A3])"  #F937 is person shrugging, F483 is woman dancing, F435 and F412 are monkeys, F6A3: Rowboat emoji 
 
     #still to test
-    #\U0001F645-\U0001F647: Various gesture emojis, such as person gesturing OK, person shrugging, and person tipping hand.
-    #\U0001F64B-\U0001F64F: Various person emojis, such as person raising hand, person bowing, and person with folded hands.
+
     #\U0001F6A3: Rowboat emoji, which depicts a person rowing a boat.
     #\U0001F6B4-\U0001F6B6: Various person emojis, such as person biking, person mountain biking, and person walking.
     #\U0001F6C0: Bath emoji, which depicts a person in a bathtub.
