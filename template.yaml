@@ -7,7 +7,7 @@ Globals:
   Function:
     MemorySize: 1024
     Timeout: 9
-    Runtime: python3.10
+    Runtime: python3.9
     Architectures:
       - arm64
 
