@@ -7,9 +7,9 @@ Globals:
   Function:
     MemorySize: 1024
     Timeout: 9
-    Runtime: python3.9
+    Runtime: python3.10
     Architectures:
-      - arm64
+      - x86_64
 
 Parameters:
     StageEnv:
