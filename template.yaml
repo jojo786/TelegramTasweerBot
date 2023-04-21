@@ -9,7 +9,7 @@ Globals:
     Timeout: 9
     Runtime: python3.10
     Architectures:
-      - x86_64
+      - arm64
 
 Parameters:
     StageEnv:
