@@ -22,6 +22,7 @@ def lambda_handler(event, context):
 async def main(event, context):
     #emoji regex has most of F4*, F6*, F9* and FA*
     emoji_blocklist  = "([\U0001F466-\U0001F479])" #Various person emojis, such as man, woman, boy, girl, princess, baby        
+    emoji_blocklist += "|([\U0001F400-\U0001F416])" #F400 (rat) to F416 (pig)
     emoji_blocklist += "|([\U0001F47A-\U0001F47F])" #goblin, ghost           
     emoji_blocklist += "|([\U0001F481-\U0001F483])" #Dancer emojis, including woman dancing, man dancing, and people with bunny ears.
     emoji_blocklist += "|([\U0001F486-\U0001F487])" #Various person emojis, such as woman getting haircut, man getting haircut, and person getting massage.
