@@ -13,7 +13,7 @@ Globals:
     Environment:
       Variables:
         stage: !FindInMap [StageMappings, !Ref StageEnv, stage]
-        POWERTOOLS_SERVICE_NAME: TelegramTasweerBot
+        POWERTOOLS_SERVICE_NAME: EmojiFaceVideo
         POWERTOOLS_METRICS_NAMESPACE: TelegramTasweerBot
 
 Parameters:

@@ -13,6 +13,7 @@ from aws_lambda_powertools.metrics import MetricUnit
 from aws_lambda_powertools.utilities.typing import LambdaContext
 
 ssm_provider = parameters.SSMProvider()
+metrics = Metrics(namespace="TelegramTasweerBot", service="EmojiFaceVideo")
 
 stage = os.environ['stage']
 TelegramBotToken = ssm_provider.get('/telegramtasweerbot/telegram/'+stage+'/bot_token', decrypt=True)

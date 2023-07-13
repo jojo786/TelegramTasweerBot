@@ -10,8 +10,8 @@ from aws_lambda_powertools.metrics import MetricUnit
 from aws_lambda_powertools.utilities.typing import LambdaContext
 
 stage = os.environ['stage']
-
 s3 = boto3.client('s3')
+metrics = Metrics(namespace="TelegramTasweerBot", service="EmojiFaceVideo")
 
 async def image(update: Update, context: ContextTypes.DEFAULT_TYPE):
     admin_list = ['Muaaza', 'LambdaYusufBot'] #List of telegram users that can bypass the rules and still post
