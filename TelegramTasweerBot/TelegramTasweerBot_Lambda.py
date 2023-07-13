@@ -8,6 +8,9 @@ import emoji
 from datetime import datetime
 from TelegramTasweerBot_TelegramHandlers import health, image, emoji_handler, vid, url_handler
 from aws_lambda_powertools.utilities import parameters
+from aws_lambda_powertools import Metrics
+from aws_lambda_powertools.metrics import MetricUnit
+from aws_lambda_powertools.utilities.typing import LambdaContext
 
 ssm_provider = parameters.SSMProvider()
 
@@ -16,7 +19,9 @@ TelegramBotToken = ssm_provider.get('/telegramtasweerbot/telegram/'+stage+'/bot_
 
 application = ApplicationBuilder().token(TelegramBotToken).build()
 
+@metrics.log_metrics  # ensures metrics are flushed upon request completion/failure
 def lambda_handler(event, context):
+    metrics.add_metric(name="Invoke", unit=MetricUnit.Count, value=1)
     return asyncio.get_event_loop().run_until_complete(main(event, context))
 
 async def main(event, context):

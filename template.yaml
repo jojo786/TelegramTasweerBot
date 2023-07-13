@@ -10,6 +10,11 @@ Globals:
     Runtime: python3.10
     Architectures:
       - arm64
+    Environment:
+      Variables:
+        stage: !FindInMap [StageMappings, !Ref StageEnv, stage]
+        POWERTOOLS_SERVICE_NAME: TelegramTasweerBot
+        POWERTOOLS_METRICS_NAMESPACE: TelegramTasweerBot
 
 Parameters:
     StageEnv:
@@ -31,9 +36,6 @@ Resources:
     Properties:
       CodeUri: TelegramTasweerBot/
       Handler: TelegramTasweerBot_Lambda.lambda_handler
-      Environment:
-        Variables:
-          stage: !FindInMap [StageMappings, !Ref StageEnv, stage]
       ReservedConcurrentExecutions: 10
       Policies:
         - RekognitionDetectOnlyPolicy: {}
