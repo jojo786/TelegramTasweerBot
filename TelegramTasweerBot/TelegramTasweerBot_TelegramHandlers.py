@@ -46,7 +46,7 @@ async def image(update: Update, context: ContextTypes.DEFAULT_TYPE):
         response = s3.upload_file('/tmp/image.jpg', 'telegramtasweerbot-'+stage+'-faceblur-in', 'image'+str(chat_id)+'-'+str(chat_user.first_name)+'-'+str(chat_user.last_name)+'.jpg')
         
         metrics.add_metric(name="ImageFaceFound", unit=MetricUnit.Count, value=1)
-        metrics.add_metadata(key="Group", value=chat_group)
+        metrics.add_metadata(key="ChatGroup", value=chat_group)
 
     else:
         print("Found " + found_face + " faces in image from user " + str(chat_user.username) + " in group " + str(chat_group) + ", NOT going to delete")
@@ -62,7 +62,7 @@ async def vid(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await context.bot.delete_message(chat_id=chat_id, message_id=update.effective_message.message_id)
 
     metrics.add_metric(name="VideoFound", unit=MetricUnit.Count, value=1)
-    metrics.add_metadata(key="Group", value=chat_group)
+    metrics.add_metadata(key="ChatGroup", value=chat_group)
 
 async def health(update: Update, context: ContextTypes.DEFAULT_TYPE):
     print("Start health command")
@@ -89,7 +89,7 @@ async def emoji_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
         print ("AFTER removing emoji: " + chat_text_noemoji)
 
     metrics.add_metric(name="EmojiFound", unit=MetricUnit.Count, value=1)
-    metrics.add_metadata(key="Group", value=chat_group)
+    metrics.add_metadata(key="ChatGroup", value=chat_group)
 
 def url_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
     print("Start processing URL links")
