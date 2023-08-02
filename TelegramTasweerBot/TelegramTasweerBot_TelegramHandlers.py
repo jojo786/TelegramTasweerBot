@@ -38,12 +38,12 @@ async def image(update: Update, context: ContextTypes.DEFAULT_TYPE):
     found_face = str({len(response['FaceDetails'])})
     if response['FaceDetails'] and (chat_user.username not in admin_list): #if there was a face found, and the person posting is NOT an admin, then delete
         
-        print("Found " + found_face + " faces in image from user " + str(chat_user.username) + " in group " + str(chat_group) + ", going to delete")
+        print("Found " + found_face + " faces in image from user " + str(chat_user.username) + " in group " + str(chat_group) + " with chat_id " + str(chat_id) + ", going to delete")
         #context.bot.send_message(chat_id=chat_id, text="Found " + found_face + " faces, deleting...")
         await context.bot.delete_message(chat_id=chat_id, message_id=update.effective_message.message_id)
         # invoke the blurring service by uploading the image to S3 - in bucket
         print ("send to image blurring bucket")
-        response = s3.upload_file('/tmp/image.jpg', 'telegramtasweerbot-'+stage+'-faceblur-in', 'image'+str(chat_id)+'-'+str(chat_user.first_name)+'-'+str(chat_user.last_name)+'.jpg')
+        response = s3.upload_file('/tmp/image.jpg', 'telegramtasweerbot-'+stage+'-faceblur-in', 'image'+'_'+str(chat_id)+'_'+str(chat_user.first_name)+'_'+str(chat_user.last_name)+'.jpg')
         
         metrics.add_metric(name="ImageFaceFound", unit=MetricUnit.Count, value=1)
         metrics.add_metadata(key="ChatGroup", value=chat_group)
