@@ -8,7 +8,71 @@ Read my [blog post](https://hacksaw.co.za/blog/running-a-telegram-bot-on-aws-lam
 
 # Architecture
 Requests come in via the Lambda URL endpoint, which get routed to a Lambda function. The Lambda function gets the Telegram Token from SSM Parameter Store. Logs are stored on CloudWatch. The CI/CD pipeline will provision both a dev and prod environment.
+
 ![architecture](docs/TelegramTasweerBot-Architecture.png)
+
+[Powertools for AWS Lambda (Python)](https://docs.powertools.aws.dev/lambda/python/latest/) is used for:
+- Parameters: gets the telegram token from AWS Systems Manager Parameter Store
+- Metrics: stores cusom metrics using Amazon CloudWatch Embedded Metric Format (EMF) to visualise the bot activity per message in CloudWatch:
+
+[Custom Metrics](docs/CloudWatch-custom metrics.png)
+
+# Types of Telegram messages/objects detected
+The bot detects these types of objects in a telegram channel/group:
+
+## Images
+It uses AWS Rekognition to detect faces in an image, and then deletes it. This bot now uses https://aws.amazon.com/blogs/compute/creating-a-serverless-face-blurring-service-for-photos-in-amazon-s3/ to obscure/blur the faces in the images, and posts the modified image back to Telegram
+
+## Videos
+Once the filter picks up a video, it deletes it.
+
+## Emojis
+Emojis are part of telegram text messages, so to prevent the bot from accessing all messages, this bot uses a Telegram Message Handler with a regex to catch only blacklisted emojis. This ensures that that the bot does not access most messages, and lowers the amount of times Telegram will invoke the bot (which will also keep the cost of running the bot low). The bot uses a blacklist/blocklist of emojis that are to be removed. Only messages with those emojis will be sent to the bot, which will replace the emoji image with its text short code, which is sometimes called [CLDR](http://cldr.unicode.org/translation/characters-emoji-symbols/short-names-and-keywords). E.g. a smiling face emoji will be replaced by `:grinning_face_with_big_eyes:`. 
+It does it as follows: 
+a handler with a blocklist is used to catch haraam emojis, deletes the message, then the [python emoji library](https://github.com/carpedm20/emoji) is used, by calling the `demojize` method on the message, which replaces emojis in the text message with their text representation, and the bot then reposts the modified message back. However, this can be seen as intrusive, as the now modified message appears as sent from the bot, and not the original person that sent the message. So therefore you want to minimise the blocklist to ONLY include haraam emojis.
+
+[Emojipedia](https://emojipedia.org/folded-hands-light-skin-tone/), the [Unicode emoji list](https://unicode.org/emoji/charts/full-emoji-list.html) and [Emojibase](https://www.emojibase.com/) are usefull resources to check emoji and its corresponding details. At the moment, the blocklist includes most of F4*, F6*, F9* and FA* ranges. E.g in the [U1F600 range](https://unicode.org/charts/PDF/U1F600.pdf), which is the most commonly used emojis, but it exludes the last few characters, so as to not block the hands emoji. The intention currently is not be an exhaustive blocklist of every haraam emoji. 
+This bot uses a blocklist regex to catch emojis, but you could modify it to block all emojis, and exclude certain allowed ones with a [regex not operator](https://stackoverflow.com/questions/7317043/regex-not-operator), but the negative lookahead did not work with the Telegram filter.  It would be usefull if you could simply block emojis by these [categories](https://github.com/shanraisshan/EmojiCodeSheet).
+Other usefull resouces is [this](https://stackoverflow.com/questions/31430587/how-to-send-emoji-with-telegram-bot-api) and [this](https://stackoverflow.com/questions/24840667/what-is-the-regex-to-extract-all-the-emojis-from-a-string), as well as this [regex tester](https://www.regextester.com/106421). 
+
+# Privacy
+This bot only has handlers for video and images, and a limited regex for emoji, so it does not have access to most Telegram messages.
+
+# How to run it
+- Create your bot using [BotFather](https://core.telegram.org/bots#3-how-do-i-create-a-bot), and note the token, e.g. `12334342:ABCD124324234`
+- Add the bot to your groups/channels, then make it an Admin to manage PII in your channels/groups
+- Decide between running it on AWS Lambda, or as a standalone python script
+
+## AWS Serverless
+Once you have forked this repo, GitHub Actions CI/CD pipeline will run on a `git push`. But if you want to build and deploy from SAM, then follow this:
+
+- Install [AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/install-cliv2.html), and  [configure it](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-quickstart.html#cli-configure-quickstart-config)
+- Install [AWS SAM CLI](https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/serverless-sam-cli-install.html)
+- Create an SSM Parameter to store the Telegram token. `aws ssm put-parameter --region eu-west-1 --name "/telegramtasweerbot/telegram/dev/bot_token" --type "SecureString" --value "12334342:ABCD12432423" --overwrite`
+- Run `sam build && sam deploy --parameter-overrides --parameter-overrides StageEnv=dev` to run it for dev. Similiar for prod.
+- Note the Outputs from the above `sam deploy` command, which will include the Value of the TelegramApi, which is the API GW / Lambda URL endpoint, e.g. `https://1fgfgfd56.lambda-url.eu-west-1.on.aws/` 
+- Update your Telegram bot to change from polling to [Webhook](https://core.telegram.org/bots/api#setwebhook), by pasting this URL in your browser, or curl'ing it: `https://api.telegram.org/bot12334342:ABCD124324234/setWebHook?url=https://1fgfgfd56.lambda-url.eu-west-1.on.aws/`. Use your bot token and API GW / Lambda URL endpoint. You can check that it was set correctly by going to `https://api.telegram.org/bot12334342:ABCD124324234/getWebhookInfo`, which should include the `url` of your API GW / Lambda URL, as well as any errors Telegram is encountering calling your bot on that webhook.
+
+## Standalone python script
+- It picks up your telegram bot token from environment variables. E.g. running `export TelegramBotToken=12334342:ABCD124324234` on Linux/macos should be sufficient. AWS credentials also picked up from environment variables.
+- Install the python requirements with pip, and then run it with python, e.g `python3 TelegramPrivacyBot.py &`
+
+# Optimising Cost and Performance
+
+Lambda allows you to specify a specific amount of memory to a Lambda function, which dictates how it performance, and thus the cost as well. Whats interesting is there is a balance between performance and cost: if you allocate less RAM, the price will be cheaper, but it will run slower, and actually costs more, and the flip-side: it you allocate mote memory, it might be cheaper to run because it will run faster, even though the increased memory costs more.  So there is actually a sweet spot you can target: the right amount of memory that makes your Lambda function run faster and cheaper. To help figure out what that sweet spot is, I used [AWS Lambda Power Tuning](https://github.com/alexcasalboni/aws-lambda-power-tuning) to test different configurations, measure the running times, and calculate the cost of each run.
+
+![architecture](docs/TelegramTasweerBot-Lambda-Power-Tuning.png)
+
+
+# TODO: 
+- Dont save image to file: https://stackoverflow.com/questions/59876271/how-to-process-images-from-telegram-bot-without-saving-to-file
+- Detect cartoon images
+- Filter and detect a list of URLs, e.g youtube.com
+- Analyse inline images that accompany URLs/links
+
+# Other AWS Options
+1. [Image Moderation Chatbot](https://serverlessrepo.aws.amazon.com/applications/arn:aws:serverlessrepo:us-east-1:426111819794:applications~image-moderation-chatbot)
+2. [Serverless Image Handler](https://aws.amazon.com/about-aws/whats-new/2021/02/introducing-serverless-image-handler-v5-2/)
 
 # Islamic ruling regarding photography
 Representations of animate objects are impermissible in Islam. This Bot can be used in your Telegram groups and channels to remove pictures and videos of animate objects.
@@ -30,50 +94,4 @@ The following list contains information from reliable and authentic Ulema regard
 - [Wifaq ul Ulema SA - Photography](docs/Photography%20-%20Wifaqul%20Ulama%20SA.jpg)
 - [Wifaqul Madaaris - Announcement](docs/Photography%20announcement-3.pdf)
 - [Using Emojis](http://muftionline.co.za/node/32294)
-
-
-It detects these types of objects in a telegram channel/group:
-## Images
-It uses AWS Rekognition to detect faces in an image, and then deletes it. This bot now uses https://aws.amazon.com/blogs/compute/creating-a-serverless-face-blurring-service-for-photos-in-amazon-s3/ to obscure/blur the faces in the images, and posts the modified image back to Telegram
-
-## Videos
-Once the filter picks up a video, it deletes it.
-
-## Emojis
-Emojis are part of telegram text messages, but we did'nt want the bot to access all messages, so we used a Telegram Message Handler with a regex to catch only blacklisted emojis. This ensures that that the bot does not access most messages, and lowers the amount of times Telegram will invoke the bot (which will also keep the cost of running the bot low). The bot uses a blacklist/blocklist of emojis that are to be removed. Only messages with those emojis will be sent to the bot, which will replace the emoji image with its text short code, which is sometimes called [CLDR](http://cldr.unicode.org/translation/characters-emoji-symbols/short-names-and-keywords). E.g. a smiling face emoji will be replaced by `:grinning_face_with_big_eyes:`. It does it as follows: a handler with a blocklist is used to catch haraam emojis, deletes the message, then the [python emoji library](https://github.com/carpedm20/emoji) is used, by calling the `demojize` method on the message, which replaces emojis in the text message with their text representation, and the bot then reposts the modified message back. However, this can be seen as intrusive, as the now modified message appears as sent from the bot, and not original person that sent the message. So therefore you want to minimise the blocklist to ONLY include haraam emojis.
-[Emojipedia](https://emojipedia.org/folded-hands-light-skin-tone/), the [Unicode emoji list](https://unicode.org/emoji/charts/full-emoji-list.html) and [Emojibase](https://www.emojibase.com/) are usefull resources to check emoji and its corresponding details. At the moment, the blocklist includes most of F4*, F6*, F9* and FA* ranges. E.g in the [U1F600 range](https://unicode.org/charts/PDF/U1F600.pdf), which is the most commonly used emojis, but it exludes the last few characters, so as to not block the hands emoji. The intention currently is not be an exhaustive blocklist of every haraam emoji. This bot uses a blocklist regex to catch emojis, but you could modify it to block all emojis, and exclude certain allowed ones with a [regex not operator](https://stackoverflow.com/questions/7317043/regex-not-operator), but the negative lookahead did not work with the Telegram filter.  It would be usefull if you could simply block emojis by these [categories](https://github.com/shanraisshan/EmojiCodeSheet).
-Other usefull resouces is [this](https://stackoverflow.com/questions/31430587/how-to-send-emoji-with-telegram-bot-api) and [this](https://stackoverflow.com/questions/24840667/what-is-the-regex-to-extract-all-the-emojis-from-a-string), as well as this [regex tester](https://www.regextester.com/106421). 
-
-# Privacy
-This bot only has handlers for video and images, and a limited regex for emoji, so it does not have access to most Telegram messages.
-
-# How to run it
-- Create your bot using [BotFather](https://core.telegram.org/bots#3-how-do-i-create-a-bot), and note the token, e.g. `12334342:ABCD124324234`
-- Add the bot to your groups/channels, then make it an Admin to manage PII in your channels/groups
-- Decide between running it on AWS Lambda, or as a standalone python script
-
-## AWS Serverless
-Once you have forked this repo, GitHub Actions CI/CD pipeline will run on a `git push`. But if you want to build and deploy from SAM, then follow this:
-
-- Install [AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/install-cliv2.html), and  [configure it](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-quickstart.html#cli-configure-quickstart-config)
-- Install [AWS SAM CLI](https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/serverless-sam-cli-install.html)
-- Create an SSM Parameter to store the Telegram token. `aws ssm put-parameter --region eu-west-1 --name "/telegramtasweerbot/telegram/dev/bot_token" --type "SecureString" --value "12334342:ABCD12432423" --overwrite`
-- Run `sam build && sam deploy --parameter-overrides --parameter-overrides StageEnv=dev` to run it for dev. Similiar for prod.
-- Note the Outputs from the above `sam deploy` command, which will include the Value of the TelegramApi, which is the Lambda URL endpoint, e.g. `https://1fgfgfd56.lambda-url.eu-west-1.on.aws/` 
-- Update your Telegram bot to change from polling to [Webhook](https://core.telegram.org/bots/api#setwebhook), by pasting this URL in your browser, or curl'ing it: `https://api.telegram.org/bot12334342:ABCD124324234/setWebHook?url=https://1fgfgfd56.lambda-url.eu-west-1.on.aws/`. Use your bot token and Lambda URL endpoint. You can check that it was set correctly by going to `https://api.telegram.org/bot12334342:ABCD124324234/getWebhookInfo`, which should include the `url` of your Lambda URL, as well as any errors Telegram is encounterting calling your bot on that API.
-
-## Standalone python script
-- It picks up your telegram bot token from environment variables. E.g. running `export TelegramBotToken=12334342:ABCD124324234` on Linux/macos should be sufficient. AWS credentials also picked up from environment variables.
-- Install the python requirements with pip, and then run it with python, e.g `python3 TelegramPrivacyBot.py &`
-
-
-# TODO: 
-- Dont save image to file: https://stackoverflow.com/questions/59876271/how-to-process-images-from-telegram-bot-without-saving-to-file
-- Detect cartoon images
-- Filter and detect a list of URLs, e.g youtube.com
-- Analyse inline images that accompany URLs/links
-
-# Other AWS Options
-1. [Image Moderation Chatbot](https://serverlessrepo.aws.amazon.com/applications/arn:aws:serverlessrepo:us-east-1:426111819794:applications~image-moderation-chatbot)
-2. [Serverless Image Handler](https://aws.amazon.com/about-aws/whats-new/2021/02/introducing-serverless-image-handler-v5-2/)
 
