@@ -15,7 +15,7 @@ Requests come in via the Lambda URL endpoint, which get routed to a Lambda funct
 - Parameters: gets the telegram token from AWS Systems Manager Parameter Store
 - Metrics: stores cusom metrics using Amazon CloudWatch Embedded Metric Format (EMF) to visualise the bot activity per message in CloudWatch:
 
-[Custom Metrics](docs/CloudWatch-custom metrics.png)
+[Custom Metrics](docs/CloudWatch-custommetrics.png)
 
 # Types of Telegram messages/objects detected
 The bot detects these types of objects in a telegram channel/group:
