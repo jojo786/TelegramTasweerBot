@@ -7,7 +7,12 @@ Globals:
   Function:
     MemorySize: 1024
     Timeout: 9
-    Runtime: python3.11
+    Runtime: python3.12
+    LoggingConfig:
+      LogGroup: !Sub /aws/lambda/${AWS::StackName}
+      LogFormat: JSON
+    Tags:
+      project: "TelegramTasweerBot"
     Architectures:
       - arm64
     Environment:
