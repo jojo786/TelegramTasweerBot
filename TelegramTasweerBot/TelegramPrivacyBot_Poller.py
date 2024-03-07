@@ -31,8 +31,8 @@ def main():
     emoji_blocklist += "|([\U0001F9D0-\U0001F9D9])" #F980-F991: animals
     emoji_blocklist += "|([\U0001F9DA-\U0001F9DE])" #F980-F991: body parts
     emoji_blocklist += "|([\U0001FAE0-\U0001FAE8])" #FAE0-FAE8: faces 
-    emoji_blocklist += "|([\U0001263A-\U0001263B])" #263A-263B: smiling faces
-    emoji_blocklist += "|([\U0001FE0F" #FE0F: smiling faces
+    emoji_blocklist += "|([\U0001263A-\U0001263B])" #263A-263B: smiling faces - not working: seems to be part of multi-code emojis
+    emoji_blocklist += "|([\U0001FE0F" #FE0F: smiling faces - not working: seems to be part of multi-code emojis
 
     application.add_handler(MessageHandler(filters.PHOTO | filters.Document.IMAGE | filters.Document.JPG, image)) #to catch inline photos, and photos as attachements/files
     application.add_handler(MessageHandler(filters.VIDEO | filters.Document.MimeType('video/mp4'), vid)) #to catch inline vidoes, and videos as attachements/files
