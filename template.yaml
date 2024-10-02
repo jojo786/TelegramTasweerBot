@@ -45,6 +45,7 @@ Resources:
       Handler: TelegramTasweerBot_Lambda.lambda_handler
       ReservedConcurrentExecutions: 10
       Policies:
+        - CloudWatchLambdaInsightsExecutionRolePolicy
         - RekognitionDetectOnlyPolicy: {}
         - Statement:
           - Effect: "Allow"
