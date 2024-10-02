@@ -20,6 +20,8 @@ Globals:
         stage: !FindInMap [StageMappings, !Ref StageEnv, stage]
         POWERTOOLS_SERVICE_NAME: EmojiFaceVideo
         POWERTOOLS_METRICS_NAMESPACE: TelegramTasweerBot
+    Layers:
+      - !Sub "arn:aws:lambda:${AWS::Region}:012438385374:layer:LambdaInsightsExtension-Arm64:18"
 
 Parameters:
     StageEnv:
