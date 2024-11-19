@@ -43,7 +43,7 @@ Resources:
     Properties:
       CodeUri: TelegramTasweerBot/
       Handler: TelegramTasweerBot_Lambda.lambda_handler
-      ReservedConcurrentExecutions: 10
+      #ReservedConcurrentExecutions: 10 #cant remember why I added this
       Policies:
         - CloudWatchLambdaInsightsExecutionRolePolicy
         - RekognitionDetectOnlyPolicy: {}
