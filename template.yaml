@@ -7,7 +7,7 @@ Globals:
   Function:
     MemorySize: 1024
     Timeout: 9
-    Runtime: python3.12
+    Runtime: python3.13
     LoggingConfig:
       LogGroup: !Sub /aws/lambda/${AWS::StackName}
       LogFormat: JSON
