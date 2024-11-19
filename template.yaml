@@ -44,6 +44,9 @@ Resources:
       CodeUri: TelegramTasweerBot/
       Handler: TelegramTasweerBot_Lambda.lambda_handler
       #ReservedConcurrentExecutions: 10 #cant remember why I added this
+      AutoPublishAlias: SnapStart
+      SnapStart:
+        ApplyOn: PublishedVersions
       Policies:
         - CloudWatchLambdaInsightsExecutionRolePolicy
         - RekognitionDetectOnlyPolicy: {}
