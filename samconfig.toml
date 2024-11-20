@@ -7,5 +7,5 @@ s3_bucket = "aws-sam-cli-managed-default-samclisourcebucket-1q7y9uu7czp2p"
 s3_prefix = "TelegramTasweerBot-Lambda"
 region = "eu-west-1"
 capabilities = "CAPABILITY_IAM"
-disable_rollback = true
+disable_rollback = false
 image_repositories = []
