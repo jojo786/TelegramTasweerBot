@@ -20,9 +20,12 @@ Globals:
         stage: !FindInMap [StageMappings, !Ref StageEnv, stage]
         POWERTOOLS_SERVICE_NAME: EmojiFaceVideo
         POWERTOOLS_METRICS_NAMESPACE: TelegramTasweerBot
+        AWS_LAMBDA_EXEC_WRAPPER: /opt/otel-instrument
     Layers:
-      - !Sub "arn:aws:lambda:${AWS::Region}:580247275435:layer:LambdaInsightsExtension-Arm64:20" #Specific for Ireland
+      - !Sub "arn:aws:lambda:${AWS::Region}:580247275435:layer:LambdaInsightsExtension-Arm64:20" #Lambda Insights Layer -Specific for Ireland
+      - !Sub "arn:aws:lambda:${AWS::Region}:615299751070:layer:AWSOpenTelemetryDistroPython:5" #Application Signals Layer - Specific for Ireland
     Tracing: Active
+
 Parameters:
     StageEnv:
       Type: String
