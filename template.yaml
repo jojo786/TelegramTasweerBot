@@ -56,12 +56,9 @@ Resources:
         - Statement:
           - Effect: "Allow"
             Action:
-              - ssm:GetParameters
               - ssm:GetParameter
-              - ssm:GetParametersByPath
             Resource:
-              - '*'
-              - 'arn:aws:ssm:::parameter/telegramtasweerbot/*'
+              - 'arn:aws:ssm:*:*:parameter/telegramtasweerbot/*'
           - Effect: Allow
             Action: s3:*
             Resource: 
